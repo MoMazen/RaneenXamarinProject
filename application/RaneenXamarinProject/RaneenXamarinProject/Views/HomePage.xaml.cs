@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RaneenXamarinProject.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,9 @@ namespace RaneenXamarinProject.Views
         public HomePage()
         {
             InitializeComponent();
+            this.BindingContext = new HomeViewModel();
+
+            //carName.ItemsSource = (BindingContext as HomeViewModel).AllEvents;
         }
     }
 }

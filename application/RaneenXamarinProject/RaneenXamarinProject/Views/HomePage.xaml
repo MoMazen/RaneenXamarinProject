@@ -5,9 +5,46 @@
              Title="Home">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to HomePage!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout>
+                <ScrollView>
+                    <StackLayout>
+                        <CarouselView x:Name="carName" ItemsSource="{Binding AllEvents}"
+                                      HeightRequest="150">
+                            <CarouselView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout BackgroundColor="Red">
+                                        <Image Source="https://dummyimage.com/200x100.png"
+                                       VerticalOptions="CenterAndExpand"
+                                       HeightRequest="170" WidthRequest="400"/>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+                        </CarouselView>
+
+                        <ListView ItemsSource="{Binding AllEvents}" RowHeight="150">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <Frame BorderColor="Black" Margin="0,10" CornerRadius="10">
+                                            <StackLayout>
+                                                <Label Text="Hey"/>
+                                                <Label Text="{Binding name}" TextColor="Green" 
+                                           FontAttributes="Bold" FontSize="18"/>
+                                                <Label Margin="10,0" Text="{Binding image}" FontSize="14"/>
+                                            </StackLayout>
+                                        </Frame>
+                                        <ViewCell.ContextActions>
+                                            <MenuItem Text="Delete" Command="{Binding DeletePost}" 
+                                          CommandParameter="{Binding .}"/>
+                                        </ViewCell.ContextActions>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </StackLayout>
+                </ScrollView>
+
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

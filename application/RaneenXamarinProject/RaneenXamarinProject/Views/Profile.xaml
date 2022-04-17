@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RaneenXamarinProject.Views.Profile" Title="Profile">
+    <ContentPage.Content>
+        <StackLayout x:Name="root" BackgroundColor="DarkRed">
+            <StackLayout HeightRequest="300">
+                <RelativeLayout>
+                    <Image BackgroundColor="White" x:Name="coverImg"
+                    RelativeLayout.WidthConstraint="{ConstraintExpression 
+                        Type=RelativeToParent,
+                        Property=Width,
+                        Factor=1
+                    }" RelativeLayout.HeightConstraint="{ConstraintExpression 
+                        Type=RelativeToParent,
+                        Property=Height,
+                        Factor=0.8
+                    }"/>
+                    <Frame CornerRadius="100" Padding="0"
+                    RelativeLayout.XConstraint="{ConstraintExpression 
+                        Type=RelativeToView,
+                        ElementName=coverImg,
+                        Property=Width,
+                        Factor=0.5,
+                        Constant=-75
+                    }" RelativeLayout.YConstraint="{ConstraintExpression 
+                        Type=RelativeToView,
+                        ElementName=coverImg,
+                        Property=Height,
+                        Factor=0.5,
+                        Constant=-75
+                    }">
+                        <Image BackgroundColor="LightGray" x:Name="profileImg"
+                               WidthRequest="150" HeightRequest="150"
+                               Source="icon_user.png"/>
+                    </Frame>
+                </RelativeLayout>
+            </StackLayout>
+            <!--<StackLayout Margin="20,15">
+                <Label FontSize="30" TextColor="White" x:Name="lblUserName" 
+                       HorizontalTextAlignment="Center" Margin="10"
+                       Text="{Binding UserName}"/>
+            </StackLayout>
+            <Grid Margin="20,10">
+                <Label Grid.Row="0" Grid.Column="0" FontSize="18" TextColor="White">University</Label>
+                <Label Grid.Row="1" Grid.Column="0" FontSize="18" TextColor="White">Address</Label>
+                <Label Grid.Row="2" Grid.Column="0" FontSize="18" TextColor="White">Mobile</Label>
+
+                <Label x:Name="txtUniversity" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" FontSize="18" TextColor="White"
+                       Text="{Binding University}"/>
+                <Label x:Name="txtAddress" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" FontSize="18" TextColor="White"
+                       Text="{Binding Address}"/>
+                <Label x:Name="txtMobile" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" FontSize="18" TextColor="White"
+                       Text="{Binding Mobile}"/>
+            </Grid>
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,50">
+                <Button Text="Edit" WidthRequest="170" Clicked="btnEdit_Click" FontSize="20"/>
+                <Button Text="Logout" WidthRequest="170" Clicked="btnLogout_Click" FontSize="20"/>
+            </StackLayout>-->
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

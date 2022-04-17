@@ -16,6 +16,7 @@ namespace RaneenXamarinProject.Models
         public DateTime created_at { get; set; }
         public string email { get; set; }
         public string verified_email { get; set; }
+        public string password { get; set; }
         public string company { get; set; }
     }
 }

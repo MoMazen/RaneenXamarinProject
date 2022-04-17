@@ -15,7 +15,6 @@ namespace RaneenXamarinProject
             Routing.RegisterRoute(nameof(DealsPage), typeof(DealsPage));
             Routing.RegisterRoute(nameof(CartPage), typeof(CartPage));
             Routing.RegisterRoute(nameof(AccountPage), typeof(AccountPage));
-            // 
         }
 
     }

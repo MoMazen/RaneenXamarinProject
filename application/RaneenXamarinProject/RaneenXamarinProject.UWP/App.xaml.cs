@@ -1,4 +1,12 @@
-﻿using System;
+using System.Reflection;
+using Syncfusion.SfRating.XForms.UWP;
+using Syncfusion.ListView.XForms.UWP;
+using Syncfusion.XForms.UWP.ComboBox;
+using Syncfusion.XForms.UWP.TextInputLayout;
+using Syncfusion.XForms.UWP.Graphics;
+using Syncfusion.XForms.UWP.Border;
+using Syncfusion.XForms.UWP.Buttons;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -57,7 +65,19 @@ namespace RaneenXamarinProject.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 global::Xamarin.Forms.Forms.SetFlags("Shell_UWP_Experimental");
-                Xamarin.Forms.Forms.Init(e);
+                var assembliesToInclude = new List<Assembly>
+                {
+                    typeof(SfButtonRenderer).GetTypeInfo().Assembly,
+                    typeof(SfBorderRenderer).GetTypeInfo().Assembly,
+                    typeof(SfGradientViewRenderer).GetTypeInfo().Assembly,
+                    typeof(SfListViewRenderer).GetTypeInfo().Assembly,
+                    typeof(SfRatingRenderer).GetTypeInfo().Assembly,
+                    typeof(SfRadioButtonRenderer).GetTypeInfo().Assembly,
+                    typeof(SfSegmentedControlRenderer).GetTypeInfo().Assembly,
+                    typeof(SfTextInputLayoutRenderer).GetTypeInfo().Assembly,
+                    typeof(SfComboBoxRenderer).GetTypeInfo().Assembly
+                };
+                Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
