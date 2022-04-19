@@ -4,6 +4,10 @@ const DBEvents = require('../../config/DBEvents.js');
 
 class ServerApp {
   constructor() {
+    this.path = require('path');
+
+    this.fs = require('fs');
+
     this.express = require('express');
 
     this.cors = require('cors');
@@ -27,6 +31,9 @@ class ServerApp {
 
       this.app.use(this.express.json());
 
+      //serving server public static folder
+      this.servePublicFiles();
+
       this.applicationRoutes();
 
       this.app.listen(PORT, () => {
@@ -41,7 +48,10 @@ class ServerApp {
     this.app.use('/app', require('../routes/auth/auth.routes.js'));
 
     //client routes
-    this.app.use('/app', require('../routes/Client/test.js'));
+    //products
+    this.app.use('/app', require('../routes/products/product.routes.js'));
+
+    this.app.use('/app', require('../routes/categories/categories.routes.js'));
 
     this.app.get('/', (req, res) => {
       res.status(200).json({
@@ -70,6 +80,10 @@ class ServerApp {
     });
 
     await this.mongodbConnectionManager.init();
+  }
+
+  servePublicFiles() {
+    this.app.use(this.express.static(this.path.join(__dirname, '../public')));
   }
 }
 
