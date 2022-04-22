@@ -48,9 +48,13 @@ class ServerApp {
     this.app.use('/app', require('../routes/auth/auth.routes.js'));
 
     //client routes
+    this.app.use('/app', require('../routes/customer/customer.routes.js'));
+    this.app.use('/app', require('../routes/address/clientAddress.routes.js'));
     //products
     this.app.use('/app', require('../routes/products/product.routes.js'));
-
+    //order
+    this.app.use('/app', require('../routes/order/order.routes.js'));
+    //categories
     this.app.use('/app', require('../routes/categories/categories.routes.js'));
 
     this.app.get('/', (req, res) => {

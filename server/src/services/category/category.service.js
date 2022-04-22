@@ -53,7 +53,7 @@ module.exports.getAllCategories = async function () {
   return new Promise(async (resolve, reject) => {
     if (mongodbConnectionManager.connected) {
       try {
-        const data = await Category.find();
+        const data = await Category.find().populate('productList');
         resolve(data);
       } catch (error) {
         reject(error);
