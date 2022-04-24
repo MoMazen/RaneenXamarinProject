@@ -6,9 +6,17 @@ namespace RaneenXamarinProject.Models
 {
     public class FacebookProfile
     {
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string UserId { get; set; }
+        public string email { get; set; }
+        public string first_name { get; set; }
+        public string last_name { get; set; }
+        public string id { get; set; }
+    }
+
+    public class JsonFacebookProfile
+    {
+        public string email { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string userId { get; set; }
     }
 }

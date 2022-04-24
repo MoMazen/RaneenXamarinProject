@@ -1,4 +1,5 @@
-﻿using RaneenXamarinProject.ViewModels;
+﻿using RaneenXamarinProject.Models;
+using RaneenXamarinProject.ViewModels;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
@@ -18,23 +19,21 @@ namespace RaneenXamarinProject.Views
         {
             this.InitializeComponent();
 
-            BindingContext = new LoginPageViewModel(Navigation);
+            BindingContext = new LoginPageViewModel();
+
+            if(SharedData.Navigation == null)
+            {
+                SharedData.Navigation = Navigation;
+            }
+            SharedData.loginPage = this;
         }
 
         protected override void OnAppearing()
         {
-            base.OnAppearing();
             if (App.Current.Properties.ContainsKey("userLogin"))
             {
-                Navigation.RemovePage(this);
                 Navigation.PushAsync(new Views.Profile());
             }
-        }
-
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-
         }
     }
 }

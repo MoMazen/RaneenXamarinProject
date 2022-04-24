@@ -9,4 +9,10 @@ namespace RaneenXamarinProject.Models
         public bool success { get; set; }
         public object data { get; set; }
     }
+
+    public class AuthResponse
+    {
+        public bool success { get; set; }
+        public string jwt { get; set; }
+    }
 }

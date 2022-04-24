@@ -14,13 +14,13 @@ namespace RaneenXamarinProject.ViewModels
 
         private ObservableCollection<Events> allEvents;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public ObservableCollection<Events> AllEvents
         {
             get { return allEvents; }
             set { allEvents = value; onPropertyChange("AllEvents"); }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public HomeViewModel()
         {
@@ -28,15 +28,15 @@ namespace RaneenXamarinProject.ViewModels
 
             AllEvents = new ObservableCollection<Events>()
             {
-                new Events(){ id="1",name="Cardify",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="2",name="Lotstring",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="3",name="Span",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="4",name="Tin",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="5",name="Fixflex",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="6",name="Cardguard",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="7",name="Zathin",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="8",name="Viva",image="http://dummyimage.com/107x206.png/dddddd/000000"},
-                new Events(){ id="9",name="Subin",image="http://dummyimage.com/107x206.png/dddddd/000000"},
+                new Events(){ id="1",name="Cardify",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="2",name="Lotstring",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="3",name="Span",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="4",name="Tin",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="5",name="Fixflex",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="6",name="Cardguard",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="7",name="Zathin",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="8",name="Viva",image="http://dummyimage.com/400x250.png/dddddd/000000"},
+                new Events(){ id="9",name="Subin",image="http://dummyimage.com/400x250.png/dddddd/000000"},
             };
         }
 

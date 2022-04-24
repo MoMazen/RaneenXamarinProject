@@ -3,13 +3,16 @@ using Plugin.FacebookClient;
 using RaneenXamarinProject.Models;
 using RaneenXamarinProject.Validators;
 using RaneenXamarinProject.Validators.Rules;
+using RaneenXamarinProject.Views;
 using System;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using Profile = RaneenXamarinProject.Views.Profile;
 
 namespace RaneenXamarinProject.ViewModels
 {
@@ -32,12 +35,10 @@ namespace RaneenXamarinProject.ViewModels
         /// <summary>
         /// Initializes a new instance for the <see cref="LoginPageViewModel" /> class.
         /// </summary>
-        public LoginPageViewModel(INavigation navigation)
+        public LoginPageViewModel()
         {
             this.InitializeProperties();
             this.AddValidationRules();
-            
-            this.Navigation = navigation;
 
             this.client = new HttpClient();
             this.facebookClient = CrossFacebookClient.Current;  // for Oauth
@@ -51,8 +52,6 @@ namespace RaneenXamarinProject.ViewModels
         #endregion
 
         #region property
-
-        public INavigation Navigation { get; set; }
 
         /// <summary>
         /// Gets or sets the property that is bound with an entry that gets the password from user in the login page.
@@ -138,13 +137,28 @@ namespace RaneenXamarinProject.ViewModels
         {
             if (this.AreFieldsValid())
             {
+                Debug.WriteLine("Login clicked");
+                ActivityIndicator activityIndicator = new ActivityIndicator { IsRunning = true, Color = Color.Orange };
                 var loginData = new Customer() { email = Email.Value, password = Password.Value };
 
-                var loginDataJson = JsonConvert.SerializeObject(loginData);
+                var jsonLoginData = JsonConvert.SerializeObject(loginData);
 
-                var resultString = await client.PostAsync("API URL", new StringContent(loginDataJson));
+                var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/login", new StringContent(jsonLoginData, Encoding.UTF8, "application/json"));
 
-                //var result = JsonConvert.DeserializeObject<Response>(resultString);
+                if (httpResponseMessage.IsSuccessStatusCode)
+                {
+                    var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Response: " + responseContent);
+
+                    var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
+
+                    if (response.success)
+                    {
+                        Preferences.Set("UserToken", response.jwt);
+                        activityIndicator.IsRunning = false;
+                        await SharedData.Navigation.PopToRootAsync();
+                    }
+                }
             }
         }
 
@@ -155,6 +169,7 @@ namespace RaneenXamarinProject.ViewModels
         private void SignUpClicked(object obj)
         {
             // Do Something
+            SharedData.Navigation.PushAsync(new SignUpPage());
         }
 
         /// <summary>
@@ -194,11 +209,40 @@ namespace RaneenXamarinProject.ViewModels
                         case FacebookActionStatus.Completed:
                             Debug.WriteLine("Data:" + e.Data);
                             Debug.WriteLine("Message:" + e.Message);
+                            
                             var facebookProfile = await Task.Run(() => JsonConvert.DeserializeObject<FacebookProfile>(e.Data));
 
                             //Application.Current.Properties.Add("userLogin", facebookProfile);
-                            Preferences.Set("userLogin", e.Data);
                             //await App.Current.MainPage.Navigation.PushModalAsync(new MainPage());
+
+                            var profile = new JsonFacebookProfile()
+                            {
+                                email = facebookProfile.email,
+                                firstName = facebookProfile.first_name,
+                                lastName = facebookProfile.last_name,
+                                userId = facebookProfile.id
+                            };
+
+                            string jsonFacebookProfile = JsonConvert.SerializeObject(profile);
+
+                            Debug.WriteLine("Request Body: " + jsonFacebookProfile);
+
+                            var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/oauth/login", new StringContent(jsonFacebookProfile, Encoding.UTF8, "application/json"));
+
+                            if (httpResponseMessage.IsSuccessStatusCode)
+                            {
+                                var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                                Debug.WriteLine("Response: " + responseContent);
+
+                                var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
+
+                                if (response.success)
+                                {
+                                    Debug.WriteLine("Iam Here!!");
+                                    Preferences.Set("UserToken", response.jwt);
+                                    await SharedData.Navigation?.PopToRootAsync();
+                                }
+                            }
                             break;
                         case FacebookActionStatus.Canceled:
                             break;
@@ -211,9 +255,12 @@ namespace RaneenXamarinProject.ViewModels
 
                 facebookClient.OnUserData += userDataDelegate;
 
-                string[] fbRequestFields = { "email", "first_name", "gender", "last_name" };
+                string[] fbRequestFields = { "email", "first_name", "birthday", "last_name" };
                 string[] fbPermisions = { "email" };
-                await facebookClient.RequestUserDataAsync(fbRequestFields, fbPermisions);
+                FacebookResponse<string> faceResponse = await facebookClient.RequestUserDataAsync(fbRequestFields, fbPermisions);
+
+                Debug.WriteLine("FaceResponse: " + faceResponse.Data +"||"+faceResponse.Status + "||" + faceResponse.Message);
+
             }
             catch (Exception ex)
             {

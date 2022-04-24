@@ -2,49 +2,75 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RaneenXamarinProject.Views.HomePage"
+             xmlns:syncfusion="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"  
              Title="Home">
     <ContentPage.Content>
-        <StackLayout>
-            <StackLayout>
-                <ScrollView>
-                    <StackLayout>
-                        <CarouselView x:Name="carName" ItemsSource="{Binding AllEvents}"
-                                      HeightRequest="150">
-                            <CarouselView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackLayout BackgroundColor="Red">
-                                        <Image Source="https://dummyimage.com/200x100.png"
-                                       VerticalOptions="CenterAndExpand"
-                                       HeightRequest="170" WidthRequest="400"/>
-                                    </StackLayout>
-                                </DataTemplate>
-                            </CarouselView.ItemTemplate>
-                        </CarouselView>
+        <Grid>
+            <StackLayout HorizontalOptions="FillAndExpand">
+                <StackLayout>
+                    <ScrollView>
+                        <StackLayout Margin="5,10">
+                            <syncfusion:SfListView x:Name="listView" IsScrollBarVisible="False" 
+                               ItemsSource="{Binding AllEvents}" AutoFitMode="DynamicHeight"
+                                   Orientation="Horizontal" SelectionMode="None" HeightRequest="175"
+                                               >
+                                <syncfusion:SfListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout HeightRequest="180">
+                                            <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
+                                                <StackLayout BackgroundColor="Red">
+                                                    <Image Source="{Binding image}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="170" WidthRequest="300"/>
+                                                </StackLayout>
+                                            </Frame>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </syncfusion:SfListView.ItemTemplate>
+                            </syncfusion:SfListView>
 
-                        <ListView ItemsSource="{Binding AllEvents}" RowHeight="150">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <Frame BorderColor="Black" Margin="0,10" CornerRadius="10">
-                                            <StackLayout>
-                                                <Label Text="Hey"/>
-                                                <Label Text="{Binding name}" TextColor="Green" 
-                                           FontAttributes="Bold" FontSize="18"/>
-                                                <Label Margin="10,0" Text="{Binding image}" FontSize="14"/>
-                                            </StackLayout>
-                                        </Frame>
-                                        <ViewCell.ContextActions>
-                                            <MenuItem Text="Delete" Command="{Binding DeletePost}" 
-                                          CommandParameter="{Binding .}"/>
-                                        </ViewCell.ContextActions>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackLayout>
-                </ScrollView>
+                            <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
+                                <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFill"/>
+                            </Frame>
 
+                            <syncfusion:SfListView x:Name="listView1" IsScrollBarVisible="False" 
+                               ItemsSource="{Binding AllEvents}" AutoFitMode="DynamicHeight" 
+                                   Orientation="Horizontal" SelectionMode="None" HeightRequest="170" Margin="0,5">
+                                <syncfusion:SfListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout>
+                                            <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
+                                                <StackLayout BackgroundColor="Red">
+                                                    <Image Source="{Binding image}"
+                                       Aspect="AspectFill"
+                                       HeightRequest="170" WidthRequest="300"/>
+                                                </StackLayout>
+                                            </Frame>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </syncfusion:SfListView.ItemTemplate>
+                            </syncfusion:SfListView>
+
+                            <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
+                                <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFill"/>
+                            </Frame>
+
+                            <StackLayout Orientation="Horizontal" Margin="0,5">
+                                <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0" WidthRequest="222">
+                                    <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFit"/>
+                                </Frame>
+                                <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0" WidthRequest="222">
+                                    <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFit"/>
+                                </Frame>
+                            </StackLayout>
+                        </StackLayout>
+                    </ScrollView>
+
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
+            <StackLayout IsVisible="false" HorizontalOptions="FillAndExpand" BackgroundColor="#80000000" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="White" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="False" />
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

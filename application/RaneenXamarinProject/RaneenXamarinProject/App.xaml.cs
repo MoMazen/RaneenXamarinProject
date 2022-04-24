@@ -16,6 +16,8 @@ namespace RaneenXamarinProject
 
         public App()
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NjE4NTI0QDMyMzAyZTMxMmUzMFhKY1dyU01NV0l3TEVzaVBpVjhHOFI2REM3eng5aExSZTlteU5BeWZZUGc9");
+
             InitializeComponent();
 
             //DependencyService.Register<MockDataStore>();

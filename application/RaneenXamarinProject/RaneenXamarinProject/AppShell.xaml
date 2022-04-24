@@ -24,7 +24,7 @@
     </Shell.Resources>
 
     <TabBar>
-        <ShellContent Title="Home" Icon="icon_home.png" Route="AboutPage" ContentTemplate="{DataTemplate local:HomePage}" />
+        <ShellContent  Title="Home" Icon="icon_home.png" Route="AboutPage" ContentTemplate="{DataTemplate local:HomePage}" />
         <ShellContent Title="Categories" Icon="icon_categories.png" ContentTemplate="{DataTemplate local:CategoriesPage}" />
         <ShellContent Title="Deals" Icon="icon_deals.png" ContentTemplate="{DataTemplate local:DealsPage}" />
         <ShellContent Title="Cart" Icon="icon_cart.png" ContentTemplate="{DataTemplate local:CartPage}" />

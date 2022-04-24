@@ -36,6 +36,10 @@
                     </Frame>
                 </RelativeLayout>
             </StackLayout>
+
+            <StackLayout Margin="20,15">
+                <Button Text="Logout" Clicked="btnLogOut_Click"/>
+            </StackLayout>
             <!--<StackLayout Margin="20,15">
                 <Label FontSize="30" TextColor="White" x:Name="lblUserName" 
                        HorizontalTextAlignment="Center" Margin="10"

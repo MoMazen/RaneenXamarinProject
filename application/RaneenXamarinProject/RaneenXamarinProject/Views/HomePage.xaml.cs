@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace RaneenXamarinProject.Views
             this.BindingContext = new HomeViewModel();
 
             //carName.ItemsSource = (BindingContext as HomeViewModel).AllEvents;
+
         }
     }
 }

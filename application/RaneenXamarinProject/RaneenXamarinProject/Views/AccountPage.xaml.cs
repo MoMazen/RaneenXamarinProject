@@ -20,7 +20,7 @@ namespace RaneenXamarinProject.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (!Preferences.ContainsKey("userLogin"))
+            if (!Preferences.ContainsKey("UserToken"))
             {
                 Navigation.PushAsync(new LoginPage());
             }
