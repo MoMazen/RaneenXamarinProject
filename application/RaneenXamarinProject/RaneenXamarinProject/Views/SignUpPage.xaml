@@ -16,7 +16,8 @@
     BackgroundImageSource="{core:OnPlatformOrientationStringValue Default=LoginBackground.png,
                                                                   iOSPhoneLandscape=LoginBackground-Landscape.png,
                                                                   iOSTabletLandscape=LoginBackground-Landscape.png}"
-    NavigationPage.HasNavigationBar="False">
+    NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -270,16 +271,9 @@
                 </StackLayout>
             </ScrollView>
 
-            <!--  Close button  -->
-            <buttons:SfButton
-                Margin="8"
-                Command="{Binding LoginCommand}"
-                FontSize="20"
-                HorizontalOptions="End"
-                Style="{StaticResource IconButtonStyle}"
-                Text="{StaticResource Close}"
-                TextColor="{DynamicResource Gray-White}"
-                VerticalOptions="Start" />
+            <StackLayout IsVisible="{Binding IsLoading}" HorizontalOptions="FillAndExpand" BackgroundColor="#80000000" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="White" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            </StackLayout>
 
         </Grid>
     </ContentPage.Content>

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms.Internals;
+﻿using RaneenXamarinProject.Models;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
 namespace RaneenXamarinProject.Views
@@ -15,6 +16,7 @@ namespace RaneenXamarinProject.Views
         /// </summary>
         public SignUpPage()
         {
+            SharedData.currentPage = this;
             this.InitializeComponent();
         }
     }

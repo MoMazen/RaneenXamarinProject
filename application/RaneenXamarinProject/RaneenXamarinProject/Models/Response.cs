@@ -15,4 +15,20 @@ namespace RaneenXamarinProject.Models
         public bool success { get; set; }
         public string jwt { get; set; }
     }
+
+    public class ErrorResponse
+    {
+        public bool success { get; set; }
+        public Error error { get; set; }
+    }
+
+    public class Error
+    {
+        public string message { get; set; }
+
+        public override string ToString()
+        {
+            return message;
+        }
+    }
 }

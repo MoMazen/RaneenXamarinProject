@@ -1,67 +1,259 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RaneenXamarinProject.Views.Profile" Title="Profile">
+<ContentPage
+    x:Class="RaneenXamarinProject.Views.Profile"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:RaneenXamarinProject.Controls"
+    xmlns:viewModel="clr-namespace:RaneenXamarinProject.ViewModels"
+    x:Name="profilePage"
+    BackgroundColor="{DynamicResource Gray-Bg}"
+    NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False">
+
+    <!--  Binding context for Profile Page  -->
+    <!--<ContentPage.BindingContext>
+        <viewModel:ChatProfilePageViewModel />
+    </ContentPage.BindingContext>-->
+
+    <ContentPage.ControlTemplate>
+        <ControlTemplate>
+            <StackLayout Spacing="0">
+                <!--  Title View  -->
+                <!--<controls:TitleView Title="Profile">
+                    <controls:TitleView.LeadingView>
+                        <buttons:SfButton
+                            x:Name="backButton"
+                            Command="{Binding BindingContext.BackButtonCommand, Source={x:Reference profilePage}}"
+                            CommandParameter="{x:Reference backButton}"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{StaticResource Back}" />
+                    </controls:TitleView.LeadingView>
+                </controls:TitleView>-->
+                <ContentPresenter />
+            </StackLayout>
+        </ControlTemplate>
+    </ContentPage.ControlTemplate>
+
     <ContentPage.Content>
-        <StackLayout x:Name="root" BackgroundColor="DarkRed">
-            <StackLayout HeightRequest="300">
-                <RelativeLayout>
-                    <Image BackgroundColor="White" x:Name="coverImg"
-                    RelativeLayout.WidthConstraint="{ConstraintExpression 
-                        Type=RelativeToParent,
-                        Property=Width,
-                        Factor=1
-                    }" RelativeLayout.HeightConstraint="{ConstraintExpression 
-                        Type=RelativeToParent,
-                        Property=Height,
-                        Factor=0.8
-                    }"/>
-                    <Frame CornerRadius="100" Padding="0"
-                    RelativeLayout.XConstraint="{ConstraintExpression 
-                        Type=RelativeToView,
-                        ElementName=coverImg,
-                        Property=Width,
-                        Factor=0.5,
-                        Constant=-75
-                    }" RelativeLayout.YConstraint="{ConstraintExpression 
-                        Type=RelativeToView,
-                        ElementName=coverImg,
-                        Property=Height,
-                        Factor=0.5,
-                        Constant=-75
-                    }">
-                        <Image BackgroundColor="LightGray" x:Name="profileImg"
-                               WidthRequest="150" HeightRequest="150"
-                               Source="icon_user.png"/>
-                    </Frame>
-                </RelativeLayout>
-            </StackLayout>
+        <Grid>
+            <ScrollView Margin="0,50,0,0" HorizontalOptions="Center">
+                <ScrollView.VerticalOptions>
+                    <OnIdiom
+                        x:TypeArguments="LayoutOptions"
+                        Default="CenterAndExpand"
+                        Phone="FillAndExpand" />
+                </ScrollView.VerticalOptions>
+                <StackLayout Spacing="0">
 
-            <StackLayout Margin="20,15">
-                <Button Text="Logout" Clicked="btnLogOut_Click"/>
-            </StackLayout>
-            <!--<StackLayout Margin="20,15">
-                <Label FontSize="30" TextColor="White" x:Name="lblUserName" 
-                       HorizontalTextAlignment="Center" Margin="10"
-                       Text="{Binding UserName}"/>
-            </StackLayout>
-            <Grid Margin="20,10">
-                <Label Grid.Row="0" Grid.Column="0" FontSize="18" TextColor="White">University</Label>
-                <Label Grid.Row="1" Grid.Column="0" FontSize="18" TextColor="White">Address</Label>
-                <Label Grid.Row="2" Grid.Column="0" FontSize="18" TextColor="White">Mobile</Label>
+                    <!--  Profile image with edit label  -->
+                    <buttons:SfButton
+                    Margin="0,10,0,0"
+                    BackgroundColor="Transparent"
+                    BorderColor="{DynamicResource Gray-Bg}"
+                    BorderWidth="2"
+                    CornerRadius="60"
+                    HorizontalOptions="Center"
+                    WidthRequest="120">
+                        <buttons:SfButton.Content>
+                            <Grid HeightRequest="120" WidthRequest="120">
 
-                <Label x:Name="txtUniversity" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" FontSize="18" TextColor="White"
-                       Text="{Binding University}"/>
-                <Label x:Name="txtAddress" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" FontSize="18" TextColor="White"
-                       Text="{Binding Address}"/>
-                <Label x:Name="txtMobile" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" FontSize="18" TextColor="White"
-                       Text="{Binding Mobile}"/>
-            </Grid>
+                                <Image
+                                Source="userProfile.png"
+                                x:Name="ProfileImage"
+                                Aspect="AspectFill"
+                                BackgroundColor="{DynamicResource Gray-200}" />
+                            </Grid>
+                        </buttons:SfButton.Content>
+                    </buttons:SfButton>
 
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,50">
-                <Button Text="Edit" WidthRequest="170" Clicked="btnEdit_Click" FontSize="20"/>
-                <Button Text="Logout" WidthRequest="170" Clicked="btnLogout_Click" FontSize="20"/>
-            </StackLayout>-->
-        </StackLayout>
+                    <!--  Profile Name  -->
+                    <Label
+                    Margin="0,10,0,10"
+                    FontFamily="Montserrat-Bold"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="{Binding CustomerData.fullName}"
+                    VerticalOptions="Center" />
+
+                    <Label
+                    Margin="0,-10,0,10"
+                    FontFamily="Montserrat"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="{Binding CustomerData.email}"
+                    VerticalOptions="Center" />
+
+                    <StackLayout Margin="0,20,0,0">
+                        <!--  Grid for profileInfo label and navigation icon  -->
+                        <Grid
+                    x:Name="InfoGrid"
+                    Padding="16"
+                    ColumnDefinitions="Auto, *, Auto"
+                    ColumnSpacing="16">
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ProfileInfoCommand}" CommandParameter="{x:Reference InfoGrid}" />
+                            </Grid.GestureRecognizers>
+
+                            <Label
+                        Grid.Column="0"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Account}" />
+
+                            <Label
+                        Grid.Column="1"
+                        FontFamily="Montserrat-Medium"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="Account Information"
+                        VerticalOptions="Center" />
+
+                            <Label
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Next}" />
+
+                        </Grid>
+
+                        <BoxView Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                        <!--  Grid for address label and navigation icon  -->
+                        <Grid
+                    x:Name="AddressGrid"
+                    Padding="16"
+                    ColumnDefinitions="Auto, *, Auto"
+                    ColumnSpacing="16">
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AddressCommand}" CommandParameter="{x:Reference AddressGrid}" />
+                            </Grid.GestureRecognizers>
+
+                            <Label
+                        Grid.Column="0"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Home}" />
+
+                            <Label
+                        Grid.Column="1"
+                        FontFamily="Montserrat-Medium"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="Address"
+                        VerticalOptions="Center" />
+
+                            <Label
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Next}" />
+
+                        </Grid>
+
+                        <BoxView Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                        <!--  Grid for cart label and navigation icon  -->
+                        <Grid
+                        x:Name="CartGrid"
+                        Padding="16"
+                        ColumnDefinitions="Auto, *, Auto"
+                        ColumnSpacing="16">
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CartCommand}" CommandParameter="{x:Reference CartGrid}" />
+                            </Grid.GestureRecognizers>
+
+                            <Label
+                        Grid.Column="0"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Cart}" />
+
+                            <Label
+                        Grid.Column="1"
+                        FontFamily="Montserrat-Medium"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="Cart"
+                        VerticalOptions="Center" />
+
+                            <Label
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Next}" />
+
+                        </Grid>
+
+                        <BoxView Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                        <!--  Grid for wishList label and navigation icon  -->
+                        <Grid
+                    x:Name="WishListGrid"
+                    Padding="16"
+                    ColumnDefinitions="Auto, *, Auto"
+                    ColumnSpacing="16">
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding WishListCommand}" CommandParameter="{x:Reference WishListGrid}" />
+                            </Grid.GestureRecognizers>
+
+                            <Label
+                        Grid.Column="0"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Favourite}" />
+
+                            <Label
+                        Grid.Column="1"
+                        FontFamily="Montserrat-Medium"
+                        HorizontalOptions="Start"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="Wish List"
+                        VerticalOptions="Center" />
+
+                            <Label
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        Style="{StaticResource IconLabelStyle}"
+                        Text="{StaticResource Next}" />
+
+                        </Grid>
+
+                        <BoxView Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                        <!--  Grid for Logout label and icon  -->
+                        <Grid
+                            x:Name="LogoutGrid"
+                            Padding="16"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="16">
+
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding LogoutCommand}" CommandParameter="{x:Reference LogoutGrid}" />
+                            </Grid.GestureRecognizers>
+                            
+                            <Label
+                                Grid.Column="0"
+                                Style="{StaticResource IconLabelStyle}"
+                                Text="{StaticResource Logout}" />
+
+                            <Label
+                                Grid.Column="1"
+                                FontFamily="Montserrat-Medium"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource TitleLabelStyle}"
+                                Text="Logout"
+                                VerticalOptions="Center" />
+
+                        </Grid>
+                    </StackLayout>
+
+                    <BoxView Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                </StackLayout>
+
+            </ScrollView>
+            <StackLayout IsVisible="{Binding IsLoading}" HorizontalOptions="FillAndExpand" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="Orange" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

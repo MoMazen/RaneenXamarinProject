@@ -21,11 +21,7 @@ namespace RaneenXamarinProject.Views
 
             BindingContext = new LoginPageViewModel();
 
-            if(SharedData.Navigation == null)
-            {
-                SharedData.Navigation = Navigation;
-            }
-            SharedData.loginPage = this;
+            SharedData.currentPage = this;
         }
 
         protected override void OnAppearing()

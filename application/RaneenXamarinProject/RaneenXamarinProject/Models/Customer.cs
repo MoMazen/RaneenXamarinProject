@@ -9,6 +9,7 @@ namespace RaneenXamarinProject.Models
         public string _id { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
+        public string fullName { get; set; }
         //public int order_count { get; set; }
         public string phone { get; set; }
         //public float total_spent { get; set; }

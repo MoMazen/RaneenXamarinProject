@@ -22914,7 +22914,10 @@ namespace RaneenXamarinProject.Droid
 			public const int tooltip_frame_light = 2131165414;
 			
 			// aapt resource value: 0x7F0700E7
-			public const int xamarin_logo = 2131165415;
+			public const int userProfile = 2131165415;
+			
+			// aapt resource value: 0x7F0700E8
+			public const int xamarin_logo = 2131165416;
 			
 			static Drawable()
 			{

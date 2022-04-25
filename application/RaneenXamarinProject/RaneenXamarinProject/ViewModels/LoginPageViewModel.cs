@@ -27,7 +27,6 @@ namespace RaneenXamarinProject.ViewModels
         HttpClient client;
         IFacebookClient facebookClient;     // for Oauth
         private ValidatableObject<string> password;
-        private bool isLoading;
 
         #endregion
 
@@ -42,6 +41,7 @@ namespace RaneenXamarinProject.ViewModels
             this.AddValidationRules();
 
             this.client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(4);
             this.facebookClient = CrossFacebookClient.Current;  // for Oauth
 
             this.LoginCommand = new Command(this.LoginClicked);
@@ -72,24 +72,6 @@ namespace RaneenXamarinProject.ViewModels
                 }
 
                 this.SetProperty(ref this.password, value);
-            }
-        }
-
-        public bool IsLoading
-        {
-            get
-            {
-                return this.isLoading;
-            }
-
-            set
-            {
-                if (this.isLoading == value)
-                {
-                    return;
-                }
-
-                this.SetProperty(ref this.isLoading, value);
             }
         }
 
@@ -154,30 +136,45 @@ namespace RaneenXamarinProject.ViewModels
         /// <param name="obj">The Object</param>
         private async void LoginClicked(object obj)
         {
+            IsLoading = true;   // activate loading
             if (this.AreFieldsValid())
             {
                 Debug.WriteLine("Login clicked");
-                IsLoading = true;   // activate loading
                 var loginData = new Customer() { email = Email.Value, password = Password.Value };
 
                 var jsonLoginData = JsonConvert.SerializeObject(loginData);
 
-                var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/login", new StringContent(jsonLoginData, Encoding.UTF8, "application/json"));
-
-                if (httpResponseMessage.IsSuccessStatusCode)
+                try
                 {
-                    var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-                    Debug.WriteLine("Response: " + responseContent);
+                    var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/login", new StringContent(jsonLoginData, Encoding.UTF8, "application/json"));
 
-                    var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
-
-                    if (response.success)
+                    if (httpResponseMessage.IsSuccessStatusCode)
                     {
-                        Preferences.Set("UserToken", response.jwt);
-                        IsLoading = false;      // deActivate loading
-                        await SharedData.Navigation.PopToRootAsync();
+                        var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                        Debug.WriteLine("Response: " + responseContent);
+
+                        var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
+
+                        if (response.success)
+                        {
+                            Preferences.Set("UserToken", response.jwt);
+                            await SharedData.Navigation.PopToRootAsync();
+                        }
+                    }
+                    else
+                    {
+                        string error = await httpResponseMessage.Content.ReadAsStringAsync();
+                        var response = JsonConvert.DeserializeObject<ErrorResponse>(error);
+                        Debug.WriteLine("Request Error: " + error);
+                        await SharedData.currentPage.DisplayAlert("Error", response.error.ToString(), "OK");
                     }
                 }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    await SharedData.currentPage.DisplayAlert("ALert", "Request time-out please try again.", "OK");
+                }
+                IsLoading = false;      // deActivate loading
             }
         }
 

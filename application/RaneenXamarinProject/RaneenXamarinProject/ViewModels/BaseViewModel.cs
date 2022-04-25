@@ -17,6 +17,28 @@ namespace RaneenXamarinProject.ViewModels
         #region Fields
 
         private Command<object> backButtonCommand;
+        private bool isLoading;
+        #endregion
+
+        #region Properties
+
+        public bool IsLoading
+        {
+            get
+            {
+                return this.isLoading;
+            }
+
+            set
+            {
+                if (this.isLoading == value)
+                {
+                    return;
+                }
+
+                this.SetProperty(ref this.isLoading, value);
+            }
+        }
 
         #endregion
 

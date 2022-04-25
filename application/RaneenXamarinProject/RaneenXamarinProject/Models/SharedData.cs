@@ -9,6 +9,6 @@ namespace RaneenXamarinProject.Models
     {
         public static INavigation Navigation { get; set; } = null;
 
-        public static Page loginPage { get; set; } = null;
+        public static Page currentPage { get; set; } = null;
     }
 }

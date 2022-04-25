@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Text;
 using Xamarin.Essentials;
+using System;
 
 namespace RaneenXamarinProject.ViewModels
 {
@@ -40,6 +41,7 @@ namespace RaneenXamarinProject.ViewModels
             this.InitializeProperties();
             this.AddValidationRules();
             this.client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(4);
             this.LoginCommand = new Command(this.LoginClicked);
             this.SignUpCommand = new Command(this.SignUpClickedAsync);
         }
@@ -177,6 +179,8 @@ namespace RaneenXamarinProject.ViewModels
         /// <param name="obj">The Object</param>
         private async void SignUpClickedAsync(object obj)
         {
+            IsLoading = true;
+
             if (this.AreFieldsValid())
             {
                 // Do something
@@ -191,23 +195,44 @@ namespace RaneenXamarinProject.ViewModels
 
                 string jsonSignUpData = JsonConvert.SerializeObject(signUpData);
                 Debug.WriteLine("Json: " + jsonSignUpData);
-                var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/register", new StringContent(jsonSignUpData, Encoding.UTF8, "application/json"));
-
-                if (httpResponseMessage.IsSuccessStatusCode)
+                try
                 {
-                    var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-                    Debug.WriteLine("Response: " + responseContent);
+                    var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/register", new StringContent(jsonSignUpData, Encoding.UTF8, "application/json"));
 
-                    var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
-
-                    if (response.success)
+                    if (httpResponseMessage.IsSuccessStatusCode)
                     {
-                        Preferences.Set("UserToken", response.jwt);
-                        await SharedData.Navigation.PopToRootAsync();
+                        var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                        Debug.WriteLine("Response: " + responseContent);
+
+                        var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
+
+                        if (response.success)
+                        {
+                            Preferences.Set("UserToken", response.jwt);
+                            await SharedData.Navigation.PopToRootAsync();
+                        }
+                        else
+                        {
+                            await SharedData.currentPage.DisplayAlert("Error", "There is an error", "OK");
+                        }
                     }
+                    else
+                    {
+                        string error = await httpResponseMessage.Content.ReadAsStringAsync();
+                        var response = JsonConvert.DeserializeObject<ErrorResponse>(error);
+                        Debug.WriteLine("Request Error: "+ error);
+                        await SharedData.currentPage.DisplayAlert("Error", response.error.ToString(), "OK");
+                    }
+                }
+                catch (System.Exception e)
+                {
+                    Debug.WriteLine("Exception: "+ e);
+                    await SharedData.currentPage.DisplayAlert("ALert","Request time-out please try again.","OK");
                 }
 
             }
+
+            IsLoading = false;
         }
 
         #endregion

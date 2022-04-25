@@ -16,6 +16,7 @@
                                                                   iOSPhoneLandscape=LoginBackground-Landscape.png,
                                                                   iOSTabletLandscape=LoginBackground-Landscape.png}"
     NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False"
     Title="Login">
 
     <ContentPage.Resources>
