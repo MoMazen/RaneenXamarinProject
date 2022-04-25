@@ -27,6 +27,7 @@ namespace RaneenXamarinProject.ViewModels
         HttpClient client;
         IFacebookClient facebookClient;     // for Oauth
         private ValidatableObject<string> password;
+        private bool isLoading;
 
         #endregion
 
@@ -71,6 +72,24 @@ namespace RaneenXamarinProject.ViewModels
                 }
 
                 this.SetProperty(ref this.password, value);
+            }
+        }
+
+        public bool IsLoading
+        {
+            get
+            {
+                return this.isLoading;
+            }
+
+            set
+            {
+                if (this.isLoading == value)
+                {
+                    return;
+                }
+
+                this.SetProperty(ref this.isLoading, value);
             }
         }
 
@@ -138,7 +157,7 @@ namespace RaneenXamarinProject.ViewModels
             if (this.AreFieldsValid())
             {
                 Debug.WriteLine("Login clicked");
-                ActivityIndicator activityIndicator = new ActivityIndicator { IsRunning = true, Color = Color.Orange };
+                IsLoading = true;   // activate loading
                 var loginData = new Customer() { email = Email.Value, password = Password.Value };
 
                 var jsonLoginData = JsonConvert.SerializeObject(loginData);
@@ -155,7 +174,7 @@ namespace RaneenXamarinProject.ViewModels
                     if (response.success)
                     {
                         Preferences.Set("UserToken", response.jwt);
-                        activityIndicator.IsRunning = false;
+                        IsLoading = false;      // deActivate loading
                         await SharedData.Navigation.PopToRootAsync();
                     }
                 }
@@ -205,8 +224,8 @@ namespace RaneenXamarinProject.ViewModels
 
                     switch (e.Status)
                     {
-
                         case FacebookActionStatus.Completed:
+                            IsLoading = true;
                             Debug.WriteLine("Data:" + e.Data);
                             Debug.WriteLine("Message:" + e.Message);
                             
@@ -240,6 +259,7 @@ namespace RaneenXamarinProject.ViewModels
                                 {
                                     Debug.WriteLine("Iam Here!!");
                                     Preferences.Set("UserToken", response.jwt);
+                                    IsLoading = false;
                                     await SharedData.Navigation?.PopToRootAsync();
                                 }
                             }

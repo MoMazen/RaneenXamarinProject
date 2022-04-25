@@ -217,7 +217,9 @@
                 Text="{StaticResource Close}"
                 TextColor="{DynamicResource Gray-White}"
                 VerticalOptions="Start" />-->
-
+            <StackLayout IsVisible="{Binding IsLoading}" HorizontalOptions="FillAndExpand" BackgroundColor="#80000000" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="White" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 
