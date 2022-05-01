@@ -7,8 +7,7 @@ namespace RaneenXamarinProject.Models
 {
     public abstract class SharedData
     {
-        public static INavigation Navigation { get; set; } = null;
-
+        public static Customer CurrentUser { get; set; }
         public static Page currentPage { get; set; } = null;
     }
 }

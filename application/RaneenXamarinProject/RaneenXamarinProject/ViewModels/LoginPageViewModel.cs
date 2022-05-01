@@ -24,7 +24,6 @@ namespace RaneenXamarinProject.ViewModels
     {
         #region Fields
 
-        HttpClient client;
         IFacebookClient facebookClient;     // for Oauth
         private ValidatableObject<string> password;
 
@@ -40,8 +39,6 @@ namespace RaneenXamarinProject.ViewModels
             this.InitializeProperties();
             this.AddValidationRules();
 
-            this.client = new HttpClient();
-            client.Timeout = TimeSpan.FromSeconds(4);
             this.facebookClient = CrossFacebookClient.Current;  // for Oauth
 
             this.LoginCommand = new Command(this.LoginClicked);
@@ -158,7 +155,7 @@ namespace RaneenXamarinProject.ViewModels
                         if (response.success)
                         {
                             Preferences.Set("UserToken", response.jwt);
-                            await SharedData.Navigation.PopToRootAsync();
+                            await Shell.Current.Navigation.PopToRootAsync();
                         }
                     }
                     else
@@ -166,13 +163,13 @@ namespace RaneenXamarinProject.ViewModels
                         string error = await httpResponseMessage.Content.ReadAsStringAsync();
                         var response = JsonConvert.DeserializeObject<ErrorResponse>(error);
                         Debug.WriteLine("Request Error: " + error);
-                        await SharedData.currentPage.DisplayAlert("Error", response.error.ToString(), "OK");
+                        await Shell.Current.DisplayAlert("Error", response.error.ToString(), "OK");
                     }
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex);
-                    await SharedData.currentPage.DisplayAlert("ALert", "Request time-out please try again.", "OK");
+                    await Shell.Current.DisplayAlert("ALert", "Request time-out please try again.", "OK");
                 }
                 IsLoading = false;      // deActivate loading
             }
@@ -182,10 +179,10 @@ namespace RaneenXamarinProject.ViewModels
         /// Invoked when the Sign Up button is clicked.
         /// </summary>
         /// <param name="obj">The Object</param>
-        private void SignUpClicked(object obj)
+        private async void SignUpClicked(object obj)
         {
             // Do Something
-            SharedData.Navigation.PushAsync(new SignUpPage());
+            await Shell.Current.Navigation.PushAsync(new SignUpPage());
         }
 
         /// <summary>
@@ -222,46 +219,55 @@ namespace RaneenXamarinProject.ViewModels
                     switch (e.Status)
                     {
                         case FacebookActionStatus.Completed:
-                            IsLoading = true;
-                            Debug.WriteLine("Data:" + e.Data);
-                            Debug.WriteLine("Message:" + e.Message);
-                            
-                            var facebookProfile = await Task.Run(() => JsonConvert.DeserializeObject<FacebookProfile>(e.Data));
-
-                            //Application.Current.Properties.Add("userLogin", facebookProfile);
-                            //await App.Current.MainPage.Navigation.PushModalAsync(new MainPage());
-
-                            var profile = new JsonFacebookProfile()
+                            try
                             {
-                                email = facebookProfile.email,
-                                firstName = facebookProfile.first_name,
-                                lastName = facebookProfile.last_name,
-                                userId = facebookProfile.id
-                            };
+                                IsLoading = true;
+                                Debug.WriteLine("Data:" + e.Data);
+                                Debug.WriteLine("Message:" + e.Message);
 
-                            string jsonFacebookProfile = JsonConvert.SerializeObject(profile);
+                                var facebookProfile = await Task.Run(() => JsonConvert.DeserializeObject<FacebookProfile>(e.Data));
 
-                            Debug.WriteLine("Request Body: " + jsonFacebookProfile);
+                                //Application.Current.Properties.Add("userLogin", facebookProfile);
+                                //await App.Current.MainPage.Navigation.PushModalAsync(new MainPage());
 
-                            var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/oauth/login", new StringContent(jsonFacebookProfile, Encoding.UTF8, "application/json"));
-
-                            if (httpResponseMessage.IsSuccessStatusCode)
-                            {
-                                var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-                                Debug.WriteLine("Response: " + responseContent);
-
-                                var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
-
-                                if (response.success)
+                                var profile = new JsonFacebookProfile()
                                 {
-                                    Debug.WriteLine("Iam Here!!");
-                                    Preferences.Set("UserToken", response.jwt);
-                                    IsLoading = false;
-                                    await SharedData.Navigation?.PopToRootAsync();
+                                    email = facebookProfile.email,
+                                    firstName = facebookProfile.first_name,
+                                    lastName = facebookProfile.last_name,
+                                    userId = facebookProfile.id
+                                };
+
+                                string jsonFacebookProfile = JsonConvert.SerializeObject(profile);
+
+                                Debug.WriteLine("Request Body: " + jsonFacebookProfile);
+
+                                var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/oauth/login", new StringContent(jsonFacebookProfile, Encoding.UTF8, "application/json"));
+
+                                if (httpResponseMessage.IsSuccessStatusCode)
+                                {
+                                    var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                                    Debug.WriteLine("Response: " + responseContent);
+
+                                    var response = JsonConvert.DeserializeObject<AuthResponse>(responseContent);
+
+                                    if (response.success)
+                                    {
+                                        Debug.WriteLine("Iam Here!!");
+                                        Preferences.Set("UserToken", response.jwt);
+                                        IsLoading = false;
+                                        await Shell.Current.Navigation?.PopToRootAsync();
+                                    }
                                 }
+                            }
+                            catch (Exception ex)
+                            {
+
+                                Debug.WriteLine("Exception: " + ex);
                             }
                             break;
                         case FacebookActionStatus.Canceled:
+                            Debug.WriteLine("Facebook Auth canceled");
                             break;
                     }
 

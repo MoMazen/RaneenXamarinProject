@@ -14,6 +14,7 @@
     <x:String x:Key="Sort">&#xe70a;</x:String>
     <x:String x:Key="BurgerMenu">&#xe72e;</x:String>
     <x:String x:Key="Favourite">&#xe701;</x:String>
+    <x:String x:Key="FavouriteFill">&#xe732;</x:String>
     <x:String x:Key="Share">&#xe704;</x:String>
     <x:String x:Key="MapPin">&#xe729;</x:String>
     <x:String x:Key="Calendar">&#xe742;</x:String>
@@ -63,5 +64,6 @@
     <x:String x:Key="Category">&#xe733;</x:String>
     <x:String x:Key="Error">&#xe707;</x:String>
     <x:String x:Key="Logout">&#xe747;</x:String>
+    
 
 </ResourceDictionary>

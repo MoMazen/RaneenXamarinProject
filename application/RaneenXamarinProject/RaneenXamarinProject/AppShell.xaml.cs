@@ -10,11 +10,11 @@ namespace RaneenXamarinProject
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
-            Routing.RegisterRoute(nameof(CategoriesPage), typeof(CategoriesPage));
-            Routing.RegisterRoute(nameof(DealsPage), typeof(DealsPage));
-            Routing.RegisterRoute(nameof(CartPage), typeof(CartPage));
-            Routing.RegisterRoute(nameof(AccountPage), typeof(AccountPage));
+            Routing.RegisterRoute("home", typeof(HomePage));
+            Routing.RegisterRoute("categories", typeof(CategoriesPage));
+            Routing.RegisterRoute("deals", typeof(DealsPage));
+            Routing.RegisterRoute("cart", typeof(CartPage));
+            //Routing.RegisterRoute("account", typeof(AccountPage));
         }
 
     }

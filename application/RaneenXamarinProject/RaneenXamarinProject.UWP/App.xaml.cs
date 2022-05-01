@@ -1,3 +1,6 @@
+using Syncfusion.XForms.UWP.BadgeView;
+using Syncfusion.XForms.UWP.EffectsView;
+using Syncfusion.XForms.UWP.Cards;
 using System.Reflection;
 using Syncfusion.SfRating.XForms.UWP;
 using Syncfusion.ListView.XForms.UWP;
@@ -66,8 +69,7 @@ namespace RaneenXamarinProject.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 global::Xamarin.Forms.Forms.SetFlags("Shell_UWP_Experimental");
                 var assembliesToInclude = new List<Assembly>
-                {
-                    typeof(SfButtonRenderer).GetTypeInfo().Assembly,
+                {typeof(SfButtonRenderer).GetTypeInfo().Assembly,
                     typeof(SfBorderRenderer).GetTypeInfo().Assembly,
                     typeof(SfGradientViewRenderer).GetTypeInfo().Assembly,
                     typeof(SfListViewRenderer).GetTypeInfo().Assembly,
@@ -75,7 +77,10 @@ namespace RaneenXamarinProject.UWP
                     typeof(SfRadioButtonRenderer).GetTypeInfo().Assembly,
                     typeof(SfSegmentedControlRenderer).GetTypeInfo().Assembly,
                     typeof(SfTextInputLayoutRenderer).GetTypeInfo().Assembly,
-                    typeof(SfComboBoxRenderer).GetTypeInfo().Assembly
+                    typeof(SfComboBoxRenderer).GetTypeInfo().Assembly,
+                    typeof(SfBadgeViewRenderer).GetTypeInfo().Assembly,
+                    typeof(SfEffectsViewRenderer).GetTypeInfo().Assembly,
+                    typeof(SfCardViewRenderer).GetTypeInfo().Assembly
                 };
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 

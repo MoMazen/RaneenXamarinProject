@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RaneenXamarinProject.Views.ProfileInfo"
+             xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:controls="clr-namespace:RaneenXamarinProject.Controls"
+             Title="Profile Informations"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{DynamicResource Gray-200}">
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, *" RowSpacing="0">
+            <!--  Title View  -->
+            <controls:TitleView Title="Profile Informations" Grid.Row="0">
+                <controls:TitleView.LeadingView>
+                    <buttons:SfButton
+                        x:Name="backButton"
+                        Command="{Binding BackButtonCommand}"
+                        CommandParameter="{x:Reference backButton}"
+                        Style="{StaticResource IconButtonStyle}"
+                        Text="{StaticResource Back}" />
+                </controls:TitleView.LeadingView>
+            </controls:TitleView>
+            
+            
+            <ScrollView Margin="0,20,0,0" Grid.Row="1" HorizontalOptions="Center">
+                <ScrollView.VerticalOptions>
+                    <OnIdiom
+                        x:TypeArguments="LayoutOptions"
+                        Default="CenterAndExpand"
+                        Phone="FillAndExpand" />
+                </ScrollView.VerticalOptions>
+                <StackLayout Spacing="0">
+                    <StackLayout Margin="15,0,15,0" Padding="15" BackgroundColor="White">
+
+                        <!--  Grid for FirstName label and icon  -->
+                        <Grid
+                            Padding="16"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="16">
+
+                            <Label
+                                Grid.Row="0"
+                                Style="{StaticResource TitleLabelStyle}"
+                                Text="First Name" 
+                                HorizontalOptions="Start"/>
+
+                            <Label
+                                Grid.Row="1"
+                                FontFamily="Montserrat-Medium"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource DescriptionLabelStyle}"
+                                Text="{Binding CustomerData.firstName}"
+                                VerticalOptions="Center" />
+
+                        </Grid>
+                        <!--  Grid for LastName label and icon  -->
+                        <Grid
+                            Padding="16"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="16">
+
+                            <Label
+                                Grid.Row="0"
+                                Style="{StaticResource TitleLabelStyle}"
+                                Text="Last Name" 
+                                HorizontalOptions="Start"/>
+
+                            <Label
+                                Grid.Row="1"
+                                FontFamily="Montserrat-Medium"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource DescriptionLabelStyle}"
+                                Text="{Binding CustomerData.lastName}"
+                                VerticalOptions="Center" />
+
+                        </Grid>
+                        <!--  Grid for Email label and icon  -->
+                        <Grid
+                            Padding="16"
+                            ColumnDefinitions="Auto, *"
+                            ColumnSpacing="16">
+
+                            <Label
+                                Grid.Row="0" Grid.Column="0"
+                                Style="{StaticResource TitleLabelStyle}"
+                                Text="Email" 
+                                HorizontalOptions="Start"/>
+
+                            <Label
+                                Grid.Row="1"
+                                FontFamily="Montserrat-Medium"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource DescriptionLabelStyle}"
+                                Text="{Binding CustomerData.email}"
+                                VerticalOptions="Center" />
+
+                        </Grid>
+
+                    </StackLayout>
+
+                    <BoxView Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                </StackLayout>
+
+            </ScrollView>
+            <StackLayout IsVisible="{Binding IsLoading}" HorizontalOptions="FillAndExpand" Grid.Row="1" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="Orange" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

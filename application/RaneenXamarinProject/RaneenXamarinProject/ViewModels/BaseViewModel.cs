@@ -1,7 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using RaneenXamarinProject.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -16,8 +23,19 @@ namespace RaneenXamarinProject.ViewModels
     {
         #region Fields
 
+        protected HttpClient client;
+
         private Command<object> backButtonCommand;
+
         private bool isLoading;
+        #endregion
+
+        #region Constructor
+        public BaseViewModel()
+        {
+            client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(10);
+        }
         #endregion
 
         #region Properties
@@ -96,14 +114,54 @@ namespace RaneenXamarinProject.ViewModels
         /// <param name="obj">The Object</param>
         private void BackButtonClicked(object obj)
         {
-            if (Device.RuntimePlatform == Device.UWP && Application.Current.MainPage.Navigation.NavigationStack.Count > 1)
+            if (Device.RuntimePlatform == Device.UWP && Shell.Current.Navigation.NavigationStack.Count > 1)
             {
-                Application.Current.MainPage.Navigation.PopAsync();
+                Shell.Current.Navigation.PopAsync();
             }
-            else if (Device.RuntimePlatform != Device.UWP && Application.Current.MainPage.Navigation.NavigationStack.Count > 0)
+            else if (Device.RuntimePlatform != Device.UWP && Shell.Current.Navigation.NavigationStack.Count > 0)
             {
-                Application.Current.MainPage.Navigation.PopAsync();
+                Shell.Current.Navigation.PopAsync();
             }
+        }
+
+        public async Task<Customer> getCurrentUser()
+        {
+            try
+            {
+                IsLoading = true;
+                if (Preferences.ContainsKey("UserToken"))
+                {
+                    client.DefaultRequestHeaders.Add("x-auth-token", Preferences.Get("UserToken", ""));
+
+                    var requestResult = await client.GetAsync("https://raneen-app.herokuapp.com/app/api/v1/Profile/me");
+
+                    if (requestResult.IsSuccessStatusCode)
+                    {
+                        var responseContent = await requestResult.Content.ReadAsStringAsync();
+                        Debug.WriteLine("Response: " + responseContent);
+
+                        var response = JsonConvert.DeserializeObject<Response>(responseContent);
+
+                        if (response.success)
+                        {
+
+                            Customer customer = JsonConvert.DeserializeObject<Customer>(response.data.ToString());
+                            Debug.WriteLine("customer : " + customer.email);
+                            customer.fullName = $"{customer.firstName} {customer.lastName}";
+                            IsLoading = false;
+                            return customer;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                //Debug.WriteLine(e);
+                await Shell.Current.DisplayAlert("Alert", "Connection error please try again!", "OK");
+            }
+            IsLoading = false;
+            Debug.WriteLine("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            return null;
         }
 
         #endregion

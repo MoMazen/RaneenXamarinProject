@@ -20,8 +20,6 @@ namespace RaneenXamarinProject.Views
             this.InitializeComponent();
 
             BindingContext = new LoginPageViewModel();
-
-            SharedData.currentPage = this;
         }
 
         protected override void OnAppearing()

@@ -1,4 +1,5 @@
 ﻿using RaneenXamarinProject.Models;
+using RaneenXamarinProject.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,9 +25,10 @@ namespace RaneenXamarinProject.ViewModels
         /// <summary>
         /// Initializes a new instance for the <see cref="ProfileViewModel" /> class
         /// </summary>
-        public ProfilePageViewModel(Customer customerData)
+        public ProfilePageViewModel()
         {
-            this.customer = customerData;
+            getCurrentUserData();
+
             this.ProfileInfoCommand = new Command(this.ProfileInfoClicked);
             this.AddressCommand = new Command(this.AddressOptionClicked);
             this.CartCommand = new Command(this.CartOptionClicked);
@@ -85,6 +87,14 @@ namespace RaneenXamarinProject.ViewModels
 
         #region Methods
 
+        private async void getCurrentUserData()
+        {
+            var customer = await getCurrentUser();
+
+            CustomerData = customer;
+        }
+
+
         /// <summary>
         /// Invoked when the profileInfo option is clicked.
         /// </summary>
@@ -96,7 +106,7 @@ namespace RaneenXamarinProject.ViewModels
             await Task.Delay(100).ConfigureAwait(true);
             (obj as Grid).BackgroundColor = Color.Transparent;
             // TODO: Navigate to ProfileInfo
-
+            await Shell.Current.Navigation.PushAsync(new Views.ProfileInfo());
         }
 
         /// <summary>
@@ -110,7 +120,7 @@ namespace RaneenXamarinProject.ViewModels
             await Task.Delay(100).ConfigureAwait(true);
             (obj as Grid).BackgroundColor = Color.Transparent;
             // TODO: Navigate to Address
-
+            await Shell.Current.Navigation.PushAsync(new MyAddressPage());
         }
 
         /// <summary>
@@ -125,6 +135,8 @@ namespace RaneenXamarinProject.ViewModels
             (obj as Grid).BackgroundColor = Color.Transparent;
             // TODO: Navigate to cart
 
+            await Shell.Current.Navigation.PopToRootAsync();
+            await Shell.Current.GoToAsync("//cart");
         }
 
         /// <summary>
@@ -138,7 +150,7 @@ namespace RaneenXamarinProject.ViewModels
             await Task.Delay(100).ConfigureAwait(true);
             (obj as Grid).BackgroundColor = Color.Transparent;
             // TODO: Navigate to WishList
-
+            await Shell.Current.Navigation.PushAsync(new WishlistPage());
         }
 
         /// <summary>
@@ -154,7 +166,7 @@ namespace RaneenXamarinProject.ViewModels
 
             // TODO: logOut
             Preferences.Remove("UserToken");
-            await SharedData.Navigation.PopToRootAsync();
+            await Shell.Current.Navigation.PopToRootAsync();
         }
 
         #endregion

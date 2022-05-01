@@ -20,7 +20,7 @@
                                             <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
                                                 <StackLayout BackgroundColor="Red">
                                                     <Image Source="{Binding image}"
-                                       Aspect="AspectFill"
+                                       Aspect="Fill"
                                        HeightRequest="170" WidthRequest="300"/>
                                                 </StackLayout>
                                             </Frame>
@@ -30,7 +30,7 @@
                             </syncfusion:SfListView>
 
                             <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
-                                <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFill"/>
+                                <Image Source="{Binding AllEvents[3].image}" Aspect="AspectFill"/>
                             </Frame>
 
                             <syncfusion:SfListView x:Name="listView1" IsScrollBarVisible="False" 
@@ -42,7 +42,7 @@
                                             <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
                                                 <StackLayout BackgroundColor="Red">
                                                     <Image Source="{Binding image}"
-                                       Aspect="AspectFill"
+                                       Aspect="Fill"
                                        HeightRequest="170" WidthRequest="300"/>
                                                 </StackLayout>
                                             </Frame>
@@ -52,15 +52,15 @@
                             </syncfusion:SfListView>
 
                             <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0">
-                                <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFill"/>
+                                <Image Source="{Binding AllEvents[2].image}" Aspect="AspectFill"/>
                             </Frame>
 
                             <StackLayout Orientation="Horizontal" Margin="0,5">
-                                <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0" WidthRequest="222">
-                                    <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFit"/>
+                                <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0" HeightRequest="170" WidthRequest="222">
+                                    <Image Source="{Binding AllEvents[1].image}" Aspect="Fill"/>
                                 </Frame>
-                                <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0" WidthRequest="222">
-                                    <Image Source="{Binding AllEvents[0].image}" Aspect="AspectFit"/>
+                                <Frame BorderColor="White" Margin="5,0" CornerRadius="10" Padding="0" HeightRequest="170" WidthRequest="222">
+                                    <Image Source="{Binding AllEvents[4].image}" Aspect="Fill"/>
                                 </Frame>
                             </StackLayout>
                         </StackLayout>

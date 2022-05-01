@@ -20,18 +20,18 @@ namespace RaneenXamarinProject.Views
 
         protected override void OnAppearing()
         {
-            if (SharedData.Navigation == null)
-            {
-                SharedData.Navigation = Navigation;
-            }
+            //if (Shell.Current.Navigation == null)
+            //{
+            //    Shell.Current.Navigation = Navigation;
+            //}
             base.OnAppearing();
             if (!Preferences.ContainsKey("UserToken"))
             {
-                Navigation.PushAsync(new LoginPage());
+                Shell.Current.Navigation.PushAsync(new LoginPage());
             }
             else
             {
-                Navigation.PushAsync(new Profile());
+                Shell.Current.Navigation.PushAsync(new Profile());
             }
         }
     }
