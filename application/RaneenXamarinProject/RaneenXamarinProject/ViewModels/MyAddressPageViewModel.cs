@@ -126,10 +126,6 @@ namespace RaneenXamarinProject.ViewModels
             var customer = await getCurrentUser();
             CustomerData = customer;
             HasAddress = CustomerData.address == null? false:true;
-            //if (!HasAddress)
-            //{
-            //    CustomerData.address = new Address();
-            //}
         }
 
         /// <summary>
@@ -179,7 +175,6 @@ namespace RaneenXamarinProject.ViewModels
         /// <param name="obj">The object</param>
         private async void AddCardButtonClicked(object obj)
         {
-            // Do something
             await Shell.Current.Navigation.PushAsync(new AddAddressPage());
         }
 

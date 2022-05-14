@@ -152,9 +152,9 @@ namespace RaneenXamarinProject.ViewModels
                 Debug.WriteLine("Request Body: "+ requestBody);
                 try
                 {
-                    client.DefaultRequestHeaders.Add("x-auth-token", Preferences.Get("UserToken", ""));
+                    httpClient.DefaultRequestHeaders.Add("x-auth-token", Preferences.Get("UserToken", ""));
                     Debug.WriteLine("Token-----------: " +Preferences.Get("UserToken", ""));
-                    var requestResponse = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/client/address/attach", new StringContent(requestBody, Encoding.UTF8, "application/json"));
+                    var requestResponse = await httpClient.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/client/address/attach", new StringContent(requestBody, Encoding.UTF8, "application/json"));
                     
                     if (requestResponse.IsSuccessStatusCode)
                     {

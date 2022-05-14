@@ -135,7 +135,8 @@ namespace RaneenXamarinProject.ViewModels
             (obj as Grid).BackgroundColor = Color.Transparent;
             // TODO: Navigate to cart
 
-            await Shell.Current.Navigation.PopToRootAsync();
+            emptyingNavigationStack();
+
             await Shell.Current.GoToAsync("//cart");
         }
 

@@ -10,12 +10,14 @@ namespace RaneenXamarinProject
         public AppShell()
         {
             InitializeComponent();
-            Routing.RegisterRoute("home", typeof(HomePage));
-            Routing.RegisterRoute("categories", typeof(CategoriesPage));
-            Routing.RegisterRoute("deals", typeof(DealsPage));
-            Routing.RegisterRoute("cart", typeof(CartPage));
-            //Routing.RegisterRoute("account", typeof(AccountPage));
         }
 
+        private async void TabBar_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (Shell.Current != null)
+            {
+                await Shell.Current.Navigation.PopToRootAsync(false);
+            }
+        }
     }
 }

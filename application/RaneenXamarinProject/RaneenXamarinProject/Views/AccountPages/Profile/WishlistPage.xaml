@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="RaneenXamarinProject.Views.WishlistPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:RaneenXamarinProject.Controls"
+    xmlns:converter="clr-namespace:RaneenXamarinProject.Converters"
+    xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:syncEffectsView="clr-namespace:Syncfusion.XForms.EffectsView;assembly=Syncfusion.Core.XForms"
+    xmlns:template="clr-namespace:RaneenXamarinProject.Views.Templates"
+    x:Name="wishlistPage"
+    Title="Wishlist"
+    BackgroundColor="{DynamicResource Gray-100}"
+    NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <converter:IntToThicknessConverter x:Key="intToThicknessConverter" />
+            <converter:DynamicResourceToColorConverter x:Key="DynamicResourceToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <!--  Title View  -->
+            <controls:TitleView Title="Wishlist" Grid.Row="0">
+                <controls:TitleView.LeadingView>
+                    <buttons:SfButton
+                        x:Name="backButton"
+                        Command="{Binding Path=BindingContext.BackButtonCommand, Source={x:Reference wishlistPage}}"
+                        CommandParameter="{x:Reference backButton}"
+                        Style="{StaticResource IconButtonStyle}"
+                        Text="{StaticResource Back}" />
+                </controls:TitleView.LeadingView>
+                <controls:TitleView.TrailingView>
+                    <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                        <badge:SfBadgeView
+                            Margin="{Binding Path=BindingContext.CartItems.Count, Source={x:Reference wishlistPage}, Converter={x:StaticResource intToThicknessConverter}}"
+                            Padding="0"
+                            BadgeText="{Binding Path=BindingContext.CartItems.Count, Source={x:Reference wishlistPage}, Mode=TwoWay}"
+                            HeightRequest="42"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"
+                            WidthRequest="40">
+                            <badge:SfBadgeView.Content>
+                                <buttons:SfButton
+                                    Command="{Binding Path=BindingContext.CardItemCommand, Source={x:Reference WishlistLayout}}"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Text="{StaticResource Cart}"/>
+                            </badge:SfBadgeView.Content>
+                            <badge:SfBadgeView.BadgeSettings>
+                                <badge:BadgeSetting
+                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                    BadgeAnimation="None"
+                                    BadgeIcon="None"
+                                    BadgeType="None"
+                                    FontSize="10"
+                                    Stroke="{DynamicResource Gray-Bg}"
+                                    StrokeWidth="1"
+                                    Offset="-10,10" />
+                            </badge:SfBadgeView.BadgeSettings>
+                        </badge:SfBadgeView>
+                    </StackLayout>
+                </controls:TitleView.TrailingView>
+            </controls:TitleView>
+            <StackLayout Margin="0,60,0,0">
+                
+                <!-- No Items View -->
+                <Grid RowDefinitions="*, Auto"
+                      IsVisible="{Binding HasItems, Converter={StaticResource InverseBoolConverter}}" Margin="0,80,0,0">
+
+                    <StackLayout
+                        BackgroundColor="Transparent"
+                        Spacing="0"
+                        VerticalOptions="Center">
+
+                        <!--  Display the svg illustration image  -->
+                        <controls:SVGImage
+                            x:Name="ErrorImage"
+                            HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                                                                                  AndroidPhonePortrait=200,
+                                                                                  AndroidPhoneLandscape=140,
+                                                                                  iOSPhonePortrait=200,
+                                                                                  iOSPhoneLandscape=140}"
+                            Source="NoItem.svg"
+                            VerticalOptions="Center"
+                            WidthRequest="{x:OnIdiom Phone=200,Desktop=300,Tablet=300}" />
+
+                        <!--  Label to display header  -->
+                        <Label
+                            Margin="0,32,0,8"
+                            FontSize="20"
+                            Style="{StaticResource TitleLabelStyle}"
+                            Text="NO ITEMS"
+                            TextColor="#333942"
+                            VerticalTextAlignment="Center" />
+
+                        <!--  Label to display content  -->
+                        <Label
+                            Margin="8,0,8,0"
+                            FontSize="16"
+                            LineHeight="{OnPlatform Android=1.25,Default=-1}"
+                            Style="{StaticResource DescriptionLabelStyle}"
+                            Text="You haven't selected any items yet"
+                            TextColor="#333942"
+                            VerticalTextAlignment="Center" />
+                            </StackLayout>
+
+                    <!--  Try again button  -->
+                    <buttons:SfButton
+                        Grid.Row="1"
+                        Margin="0,60,0,24"
+                        Command="{Binding Path=BindingContext.BackButtonCommand, Source={x:Reference wishlistPage}}"
+                        Style="{StaticResource GradientButtonStyle}"
+                        Text="GO BACK"
+                        VerticalOptions="End"
+                        WidthRequest="245" />
+
+                </Grid>
+
+                <!-- WishList Items -->
+                <Grid RowDefinitions="Auto, *" RowSpacing="0" IsVisible="{Binding HasItems}">
+
+                    <!--  Cart items  -->
+                    <listView:SfListView
+                x:Name="WishlistLayout"
+                Grid.Row="1"
+                AllowSwiping="True"
+                BackgroundColor="{OnIdiom Default={StaticResource Transparent},
+                                          Desktop={StaticResource Gray-Bg},
+                                          Converter={StaticResource DynamicResourceToColorConverter}}"
+                ItemSize="130"
+                ItemsSource="{Binding WishListItems}"
+                SelectionMode="None"
+                SwipeOffset="88"
+                VerticalOptions="Start">
+
+                        <listView:SfListView.ItemTemplate>
+                            <DataTemplate>
+                                <syncEffectsView:SfEffectsView
+                            Margin="0,16,0,0"
+                            RippleColor="{DynamicResource Gray-300}"
+                            TouchDownEffects="Ripple"
+                            TouchUpCommand="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference wishlistPage}}"
+                            TouchUpCommandParameter="{Binding}">
+                                    <template:WishlistItemTemplate ParentBindingContext="{Binding Path=BindingContext, Source={x:Reference wishlistPage}}" />
+                                </syncEffectsView:SfEffectsView>
+                            </DataTemplate>
+                        </listView:SfListView.ItemTemplate>
+
+                        <listView:SfListView.RightSwipeTemplate>
+                            <DataTemplate x:Name="RightSwipeTemplate">
+                                <Grid
+                            Margin="0,16,0,0"
+                            BackgroundColor="{DynamicResource Red}"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="Fill">
+                                    <Label
+                                BackgroundColor="Transparent"
+                                FontFamily="FontIcons"
+                                FontSize="30"
+                                HorizontalOptions="Center"
+                                Text="{StaticResource Delete}"
+                                TextColor="{DynamicResource Gray-White}"
+                                VerticalOptions="Center" />
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference WishlistLayout}}" CommandParameter="{Binding .}" />
+                                    </Grid.GestureRecognizers>
+                                </Grid>
+                            </DataTemplate>
+                        </listView:SfListView.RightSwipeTemplate>
+                    </listView:SfListView>
+                </Grid>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsLoading}" HorizontalOptions="FillAndExpand" BackgroundColor="#80000000" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="White" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

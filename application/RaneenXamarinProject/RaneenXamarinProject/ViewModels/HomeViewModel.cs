@@ -5,27 +5,32 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text;
+using Xamarin.Forms;
 
 namespace RaneenXamarinProject.ViewModels
 {
-    public class HomeViewModel:INotifyPropertyChanged
+    public class HomeViewModel:BaseViewModel
     {
-        EventsService eventsService;
+        private Command itemSelectedCommand;
 
         private ObservableCollection<Events> allEvents;
 
         public ObservableCollection<Events> AllEvents
         {
             get { return allEvents; }
-            set { allEvents = value; onPropertyChange("AllEvents"); }
+            set 
+            { 
+                this.SetProperty(ref allEvents, value); 
+            }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public Command ItemSelectedCommand
+        {
+            get { return this.itemSelectedCommand ?? (this.itemSelectedCommand = new Command(this.ItemSelected)); }
+        }
 
         public HomeViewModel()
         {
-            eventsService = new EventsService();
-
             AllEvents = new ObservableCollection<Events>()
             {
                 new Events(){ id="1",name="Cardify",image="offers1.png"},
@@ -38,11 +43,18 @@ namespace RaneenXamarinProject.ViewModels
                 //new Events(){ id="8",name="Viva",image="offers/offers1.png"},
                 //new Events(){ id="9",name="Subin",image="offers/offers1.png"},
             };
+
+            getUser();
         }
 
-        private void onPropertyChange(string _prop)
+        private void ItemSelected(object obj)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(_prop));
+            Shell.Current.GoToAsync("//categories");
+        }
+
+        private async void getUser()
+        {
+            SharedData.CurrentUser = await getCurrentUser();
         }
     }
 }

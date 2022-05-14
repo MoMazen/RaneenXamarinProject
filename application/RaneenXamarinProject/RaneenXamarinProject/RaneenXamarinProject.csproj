@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -8,6 +8,9 @@
   <ItemGroup>
     <None Remove="Data\detail.json" />
     <None Remove="Data\ecommerce.json" />
+    <None Remove="Data\errorAndEmpty.json" />
+    <None Remove="Images\EmptyCart.svg" />
+    <None Remove="Images\NoInternet.svg" />
     <None Remove="Resources\Fonts\Montserrat-Bold.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Medium.ttf" />
     <None Remove="Resources\Fonts\Montserrat-Regular.ttf" />
@@ -18,6 +21,10 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\detail.json" />
     <EmbeddedResource Include="Data\ecommerce.json" />
+    <EmbeddedResource Include="Data\errorAndEmpty.json" />
+	<EmbeddedResource Include="Images\EmptyCart.svg" />
+	<EmbeddedResource Include="Images\NoItem.svg" />
+    <EmbeddedResource Include="Images\NoInternet.svg" />
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Bold.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Medium.ttf" />
     <EmbeddedResource Include="Resources\Fonts\Montserrat-Regular.ttf" />
@@ -29,21 +36,22 @@
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Plugin.FacebookClient" Version="4.0.1" />
+    <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
     <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="20.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.Cards" Version="20.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.Core" Version="20.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="20.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="20.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPicker" Version="20.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="20.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRotator" Version="20.1.0.48" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Profile\EditAddressPage.xaml.cs">
-      <DependentUpon>EditAddressPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -107,52 +115,70 @@
     <EmbeddedResource Update="Themes\LightTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\AccountPage.xaml">
+    <EmbeddedResource Update="Views\CartPages\CardPaymentPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\CategoriesPages\CategoryProductsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Profile\EditAddressPage.xaml">
+    <EmbeddedResource Update="Views\CategoriesPages\DetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Profile\AddAddressPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\CartPage.xaml">
+    <EmbeddedResource Update="Views\Shell\AccountPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CategoriesPage.xaml">
+    <EmbeddedResource Update="Views\NoInternetConnectionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AccountPages\Profile\AddAddressPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\CartPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ContactEmailEntry.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\DealsPage.xaml">
+    <EmbeddedResource Update="Views\Shell\CategoriesPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\EmailEntry.xaml">
+    <EmbeddedResource Update="Views\AccountPages\LoginAndSignup\ContactEmailEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\HomePage.xaml">
+    <EmbeddedResource Update="Views\Shell\DealsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\LoginPage.xaml">
+    <EmbeddedResource Update="Views\AccountPages\LoginAndSignup\EmailEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Profile\MyAddressPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Profile.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Profile\ProfileInfo.xaml">
+    <EmbeddedResource Update="Views\Shell\HomePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\SignUpPage.xaml">
+    <EmbeddedResource Update="Views\AccountPages\LoginAndSignup\LoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AccountPages\Profile\MyAddressPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AccountPages\Profile\Profile.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AccountPages\Profile\ProfileInfo.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AccountPages\LoginAndSignup\SignUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Templates\CardDisplayView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Templates\CartItemListTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Templates\PriceDetailView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Templates\WishlistItemTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Profile\WishlistPage.xaml">
+    <EmbeddedResource Update="Views\AccountPages\Profile\WishlistPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>

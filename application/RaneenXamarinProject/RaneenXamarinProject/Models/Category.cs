@@ -6,9 +6,9 @@ namespace RaneenXamarinProject.Models
 {
     public class Category
     {
-        public string id { get; set; }
+        public string _id { get; set; }
         public string name { get; set; }
         public string image { get; set; }
-        public List<Product1> product_list { get; set; }
+        public List<Product> product_list { get; set; }
     }
 }

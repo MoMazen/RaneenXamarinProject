@@ -1,3 +1,4 @@
+using Syncfusion.XForms.Pickers.UWP;
 using Syncfusion.XForms.UWP.BadgeView;
 using Syncfusion.XForms.UWP.EffectsView;
 using Syncfusion.XForms.UWP.Cards;
@@ -80,7 +81,8 @@ namespace RaneenXamarinProject.UWP
                     typeof(SfComboBoxRenderer).GetTypeInfo().Assembly,
                     typeof(SfBadgeViewRenderer).GetTypeInfo().Assembly,
                     typeof(SfEffectsViewRenderer).GetTypeInfo().Assembly,
-                    typeof(SfCardViewRenderer).GetTypeInfo().Assembly
+                    typeof(SfCardViewRenderer).GetTypeInfo().Assembly,
+                    typeof(SfDatePickerRenderer).GetTypeInfo().Assembly
                 };
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 

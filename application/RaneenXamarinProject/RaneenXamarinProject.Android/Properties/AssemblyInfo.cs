@@ -16,6 +16,7 @@ using Android.App;
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Application(UsesCleartextTraffic = true)]
+[assembly: UsesPermission(Android.Manifest.Permission.AccessNetworkState)]
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version

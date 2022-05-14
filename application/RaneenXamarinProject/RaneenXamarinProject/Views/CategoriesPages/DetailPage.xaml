@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="RaneenXamarinProject.Views.DetailPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+    xmlns:behavior="clr-namespace:RaneenXamarinProject.Behaviors"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:RaneenXamarinProject.Controls"
+    xmlns:converter="clr-namespace:RaneenXamarinProject.Converters"
+    xmlns:detailBehavior="clr-namespace:RaneenXamarinProject.Behaviors"
+    xmlns:helper="clr-namespace:RaneenXamarinProject.Helpers"
+    xmlns:local="clr-namespace:RaneenXamarinProject.Views"
+    xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms"
+    xmlns:rotator="clr-namespace:Syncfusion.SfRotator.XForms;assembly=Syncfusion.SfRotator.XForms"
+    x:Name="detailPage"
+    Title="Detail page"
+    BackgroundColor="{OnIdiom Default={DynamicResource Gray-Bg},
+                              Desktop={DynamicResource Gray-100},
+                              Converter={StaticResource DynamicResourceToColorConverter}}"
+    NavigationPage.HasNavigationBar="False"
+    Shell.NavBarIsVisible="False">
+    <ContentPage.Behaviors>
+        <detailBehavior:CartBehavior />
+    </ContentPage.Behaviors>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+
+            <DataTemplate x:Key="PortraitTemplate">
+                <Image
+                    Margin="3"
+                    Aspect="{OnIdiom Default=AspectFit,Tablet=AspectFit}"
+                    BackgroundColor="{DynamicResource Gray-Bg}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                     Source="{Binding .}">
+                    <!--<Image.Source>
+                        <UriImageSource
+                            CacheValidity="14"
+                            CachingEnabled="true"
+                            Uri="{Binding .}" />
+                    </Image.Source>-->
+                </Image>
+            </DataTemplate>
+
+            <DataTemplate x:Key="LandscapeTemplate">
+                <Image
+                    Margin="3"
+                    Aspect="AspectFill"
+                    BackgroundColor="{DynamicResource Gray-200}"
+                    HeightRequest="350"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Source="{Binding .}">
+                    <!--<Image.Source>
+                        <UriImageSource
+                            CacheValidity="14"
+                            CachingEnabled="true"
+                            Uri="{Binding .}" />
+                    </Image.Source>-->
+                </Image>
+            </DataTemplate>
+
+            <ControlTemplate x:Key="DefaultTemplate">
+                <ScrollView>
+                    <ContentPresenter />
+                </ScrollView>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="DesktopDetailTemplate">
+                <ScrollView VerticalScrollBarVisibility="Never">
+                    <ContentPresenter />
+                </ScrollView>
+            </ControlTemplate>
+
+            <converter:BooleanToColorConverter x:Key="BoolToColorConverter" />
+            <converter:BooleanToStringConverter x:Key="BoolToStringConverter" />
+            <converter:DynamicResourceToColorConverter x:Key="DynamicResourceToColorConverter" />
+            <!--<converter:VisibilityConverter x:Key="VisibilityConverter" />-->
+            <converter:IntToThicknessConverter x:Key="intToThicknessConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ControlTemplate>
+        <ControlTemplate>
+            <StackLayout Spacing="0">
+
+                <!--  Title View  -->
+                <controls:TitleView Title="Details">
+                    <controls:TitleView.LeadingView>
+                        <buttons:SfButton
+                            x:Name="backButton"
+                            Command="{Binding Path=BindingContext.BackButtonCommand, Source={x:Reference detailPage}}"
+                            CommandParameter="{x:Reference backButton}"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{StaticResource Back}" />
+                    </controls:TitleView.LeadingView>
+
+                    <controls:TitleView.TrailingView>
+                        <badge:SfBadgeView
+                            Margin="{Binding Path=BindingContext.CartItems.Count, Source={x:Reference detailPage}, Converter={x:StaticResource intToThicknessConverter}}"
+                            Padding="0"
+                            BadgeText="{Binding Path=BindingContext.CartItems.Count, Source={x:Reference detailPage}, Mode=TwoWay}"
+                            HeightRequest="42"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center"
+                            WidthRequest="40">
+                            <badge:SfBadgeView.Content>
+                                <buttons:SfButton
+                                    Command="{TemplateBinding BindingContext.CardItemCommand}"
+                                    HorizontalOptions="End"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Text="{StaticResource Cart}" />
+                            </badge:SfBadgeView.Content>
+                            <badge:SfBadgeView.BadgeSettings>
+                                <badge:BadgeSetting
+                                    BackgroundColor="{DynamicResource PrimaryColor}"
+                                    BadgeAnimation="None"
+                                    BadgeType="None"
+                                    FontSize="10"
+                                    Stroke="{DynamicResource Gray-Bg}"
+                                    StrokeWidth="1"
+                                    Offset="-10,10" />
+                            </badge:SfBadgeView.BadgeSettings>
+                        </badge:SfBadgeView>
+                    </controls:TitleView.TrailingView>
+                </controls:TitleView>
+
+                <ContentPresenter />
+
+            </StackLayout>
+        </ControlTemplate>
+    </ContentPage.ControlTemplate>
+
+
+    <ContentPage.Content>
+        <ContentView ControlTemplate="{StaticResource DefaultTemplate}">
+            <Grid
+                Margin="{OnIdiom Default=0,
+                                 Desktop='24,24,24,0'}"
+                Padding="{OnIdiom Default=0,
+                                  Desktop=16}"
+                BackgroundColor="{OnIdiom Desktop={DynamicResource Gray-Bg},
+                                          Converter={StaticResource DynamicResourceToColorConverter}}"
+                ColumnSpacing="{OnIdiom Default=0,
+                                        Desktop=16}"
+                RowSpacing="0">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="{OnIdiom Phone=400, Tablet=500, Desktop=*}" />
+                    <RowDefinition Height="{OnIdiom Default=*, Desktop=0}" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{OnIdiom Desktop=0.4*, Default=*}" />
+                    <ColumnDefinition Width="{OnIdiom Desktop=0.6*, Default=0}" />
+                </Grid.ColumnDefinitions>
+
+                <!--  Product images  -->
+                <rotator:SfRotator
+                    x:Name="Rotator"
+                    BackgroundColor="{OnIdiom Default={DynamicResource Gray-Bg},
+                                              Tablet={DynamicResource Gray-100},
+                                              Converter={StaticResource DynamicResourceToColorConverter}}"
+                    DotPlacement="OutSide"
+                    DotsBorderColor="Transparent"
+                    EnableLooping="False"
+                    HorizontalOptions="Center"
+                    ItemTemplate="{StaticResource PortraitTemplate}"
+                    ItemsSource="{Binding SelectedProduct.images}"
+                    NavigationStripMode="Dots"
+                    SelectedDotColor="{DynamicResource PrimaryColor}"
+                    UnselectedDotColor="{DynamicResource Gray-200}"
+                    VerticalOptions="Start"/>
+
+                <ContentView
+                    Grid.Row="{OnIdiom Default=1,Desktop=0}"
+                    Grid.Column="{OnIdiom Default=0,Desktop=1}"
+                    ControlTemplate="{OnIdiom Desktop={StaticResource DesktopDetailTemplate}}">
+                    <Grid
+                        BackgroundColor="{DynamicResource Gray-Bg}"
+                        ColumnSpacing="0"
+                        RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, Auto, 4* "
+                        RowSpacing="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{OnIdiom Default=16, Desktop=0}" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="16" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Product Name  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Margin="{OnIdiom Phone='0,0,0,2',Desktop='0,8,0,0',Tablet='0,16,0,0'}"
+                            HorizontalOptions="StartAndExpand"
+                            LineBreakMode="TailTruncation"
+                            MaxLines="1"
+                            Style="{StaticResource TitleLabelStyle}"
+                            Text="{Binding  Path=SelectedProduct.title}" />
+
+                        <!--  Product Description  -->
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            helper:RTLHelper.Margin="{OnIdiom Default='0,0,3,2',
+                                                              Tablet='0,8,3,8'}"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            LineBreakMode="TailTruncation"
+                            MaxLines="2"
+                            Style="{StaticResource DescriptionLabelStyle}"
+                            Text="{Binding SelectedProduct.description}" />
+
+                        <!--  Product rating  -->
+                        <rating:SfRating
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            helper:RTLHelper.Margin="0,6,6,11"
+                            HorizontalOptions="Start"
+                            ItemSize="14"
+                            RatingSettings="{StaticResource RatingSettings}"
+                            Style="{StaticResource RatingStyle}"
+                            Value="{Binding SelectedProduct.OverallRating}" />
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="0,6,0,11"
+                            FontSize="{OnIdiom Default=12,
+                                               Desktop=14}"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            Style="{StaticResource DescriptionLabelStyle}"
+                            Text="{Binding OverallRating, StringFormat='{}{0} Ratings'}"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center" />
+
+                        <StackLayout
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Margin="{OnIdiom Phone='0,0,0,10',Tablet='0,13,0,10',Desktop=0}"
+                            Orientation="Horizontal"
+                            Spacing="2">
+
+                            <!--  Product Price  -->
+                            <Label
+                                FontSize="{OnIdiom Default=20,
+                                                   Desktop=24}"
+                                HorizontalOptions="Start"
+                                HorizontalTextAlignment="Start"
+                                Style="{StaticResource TitleLabelStyle}"
+                                Text="{Binding SelectedProduct.DiscountPrice, StringFormat='EGP {0:0 }'}"
+                                TextColor="{DynamicResource PrimaryColor}"
+                                VerticalOptions="Center"
+                                VerticalTextAlignment="Center" />
+
+                            <Label
+                                Style="{StaticResource SimpleLabelStyle}"
+                                Text="{Binding SelectedProduct.price, StringFormat='EGP {0:0.00} '}"
+                                TextDecorations="Strikethrough" />
+
+                            <Label
+                                Style="{StaticResource SimpleLabelStyle}"
+                                Text="{Binding SelectedProduct.DiscountPercent, StringFormat=' ({0}% OFF)'}"
+                                TextColor="{DynamicResource PrimaryColor}" />
+
+                        </StackLayout>
+
+                        <!--  Favourite Icon  -->
+                        <buttons:SfButton
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            Grid.Column="3"
+                            BorderColor="{DynamicResource Gray-300}"
+                            BorderWidth="1"
+                            Command="{Binding BindingContext.FavouriteCommand, Source={x:Reference detailPage}}"
+                            CommandParameter="{Binding .}"
+                            HorizontalOptions="End"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{Binding SelectedProduct.IsFavourite, Converter={StaticResource BoolToStringConverter}, ConverterParameter=1}"
+                            TextColor="{Binding SelectedProduct.IsFavourite, Converter={x:StaticResource BoolToColorConverter}, ConverterParameter=4}" />
+
+                        <BoxView
+                            Grid.Row="{OnIdiom Default=5,
+                                               Phone=4}"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="5"
+                            HeightRequest="{OnIdiom Tablet=24,
+                                                    Desktop=8,
+                                                    Phone=16}"
+                            Style="{StaticResource HorizontalSeparatorStyle}"
+                            Color="{OnIdiom Default={DynamicResource Gray-100},
+                                            Desktop={DynamicResource Gray-Bg},
+                                            Converter={StaticResource DynamicResourceToColorConverter}}" />
+
+                        <BoxView
+                            Grid.Row="8"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="5"
+                            HeightRequest="{OnIdiom Tablet=24,
+                                                    Default=0}"
+                            Style="{StaticResource HorizontalSeparatorStyle}"
+                            Color="{OnIdiom Default={DynamicResource Gray-100},
+                                            Desktop={DynamicResource Gray-Bg},
+                                            Converter={StaticResource DynamicResourceToColorConverter}}" />
+
+                        <StackLayout
+                            Grid.Row="{OnIdiom Default=4,
+                                               Phone=7}"
+                            Grid.Column="{OnIdiom Default=1,
+                                                  Phone=0}"
+                            Grid.ColumnSpan="{OnIdiom Default=4,
+                                                      Phone=5}"
+                            Padding="0,16"
+                            BackgroundColor="{OnIdiom Default={DynamicResource Gray-Bg},
+                                                      Phone={DynamicResource Gray-100},
+                                                      Converter={StaticResource DynamicResourceToColorConverter}}"
+                            Orientation="Horizontal"
+                            Spacing="10">
+
+                            <!--  Buy Now Button  -->
+                            <buttons:SfButton
+                                IsVisible="{OnIdiom Default=True,
+                                                    Phone=False}"
+                                Style="{StaticResource GradientButtonStyle}"
+                                Text="BUY NOW"
+                                WidthRequest="200" />
+
+                            <!--  Add To Cart Button  -->
+                            <buttons:SfButton
+                                Margin="0"
+                                Command="{Binding AddToCartCommand}"                              
+                                CommandParameter="{Binding}"
+                                HorizontalOptions="{OnIdiom Default=Center,
+                                                            Phone=CenterAndExpand}"
+                                Style="{StaticResource GradientButtonStyle}"
+                                Text="ADD TO CART"
+                                WidthRequest="200" />
+                        </StackLayout>
+
+                        <!--  Product Description  -->
+                        <Label
+                            Grid.Row="9"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="3"
+                            Margin="0,16,0,8"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            Style="{StaticResource TitleLabelStyle}"
+                            Text="Product Description"
+                            VerticalOptions="Start" />
+
+                        <Label
+                            HeightRequest="70"
+                            Grid.Row="10"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Margin="0,0,0,30"
+                            HorizontalOptions="Start"
+                            HorizontalTextAlignment="Start"
+                            LineBreakMode="TailTruncation"
+                            MaxLines="3"
+                            Style="{StaticResource DescriptionLabelStyle}"
+                            Text="{Binding SelectedProduct.description}" />
+
+                    </Grid>
+                </ContentView>
+
+            </Grid>
+        </ContentView>
+    </ContentPage.Content>
+
+</ContentPage>

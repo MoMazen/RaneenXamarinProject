@@ -23,7 +23,7 @@ namespace RaneenXamarinProject.ViewModels
     {
         #region Fields
 
-        protected HttpClient client;
+        protected HttpClient httpClient;
 
         private Command<object> backButtonCommand;
 
@@ -33,8 +33,8 @@ namespace RaneenXamarinProject.ViewModels
         #region Constructor
         public BaseViewModel()
         {
-            client = new HttpClient();
-            client.Timeout = TimeSpan.FromSeconds(10);
+            httpClient = new HttpClient();
+            httpClient.Timeout = TimeSpan.FromSeconds(10);
         }
         #endregion
 
@@ -131,9 +131,9 @@ namespace RaneenXamarinProject.ViewModels
                 IsLoading = true;
                 if (Preferences.ContainsKey("UserToken"))
                 {
-                    client.DefaultRequestHeaders.Add("x-auth-token", Preferences.Get("UserToken", ""));
+                    httpClient.DefaultRequestHeaders.Add("x-auth-token", Preferences.Get("UserToken", ""));
 
-                    var requestResult = await client.GetAsync("https://raneen-app.herokuapp.com/app/api/v1/Profile/me");
+                    var requestResult = await httpClient.GetAsync("https://raneen-app.herokuapp.com/app/api/v1/Profile/me");
 
                     if (requestResult.IsSuccessStatusCode)
                     {
@@ -146,6 +146,7 @@ namespace RaneenXamarinProject.ViewModels
                         {
 
                             Customer customer = JsonConvert.DeserializeObject<Customer>(response.data.ToString());
+                            SharedData.CurrentUser = customer;
                             Debug.WriteLine("customer : " + customer.email);
                             customer.fullName = $"{customer.firstName} {customer.lastName}";
                             IsLoading = false;
@@ -160,8 +161,35 @@ namespace RaneenXamarinProject.ViewModels
                 await Shell.Current.DisplayAlert("Alert", "Connection error please try again!", "OK");
             }
             IsLoading = false;
-            Debug.WriteLine("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             return null;
+        }
+
+        protected async Task<ClientData> getCurrentUserData()
+        {
+            if (Preferences.ContainsKey("UserToken"))
+            {
+                return await App.Database.GetClientDataAsync(Preferences.Get("UserToken", ""));
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        protected void emptyingNavigationStack()
+        {
+            var existingPages = Shell.Current.Navigation.NavigationStack;
+
+            if(existingPages.Count > 1)
+            {
+                for (int i = 1; i < existingPages.Count; i++)
+                {
+                    if (existingPages[i] != null)
+                    {
+                        Shell.Current.Navigation.RemovePage(existingPages[i]);
+                    }
+                }
+            }
         }
 
         #endregion

@@ -23,9 +23,9 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <TabBar>
-        <ShellContent Route="home" x:Name="homeTab"  Title="Home" Icon="icon_home.png" ContentTemplate="{DataTemplate local:HomePage}" />
-        <ShellContent Route="categories" x:Name="categoriesTab" Title="Categories" Icon="icon_categories.png" ContentTemplate="{DataTemplate local:CategoriesPage}" />
+    <TabBar PropertyChanged="TabBar_PropertyChanged">
+        <ShellContent Route="home" x:Name="homeTab"  Title="Home" Icon="icon_home.png" ContentTemplate="{DataTemplate local:HomePage}"/>
+        <ShellContent Route="categories" x:Name="categoriesTab" Title="Categories" Icon="icon_categories.png" ContentTemplate="{DataTemplate local:CategoriesPage}"/>
         <ShellContent Route="deals" x:Name="dealsTab" Title="Deals" Icon="icon_deals.png" ContentTemplate="{DataTemplate local:DealsPage}" />
         <ShellContent Route="cart" x:Name="cartTab" Title="Cart" Icon="icon_cart.png" ContentTemplate="{DataTemplate local:CartPage}" />
         <ShellContent Route="account" x:Name="accountTab" Title="Account" Icon="icon_account.png" ContentTemplate="{DataTemplate local:AccountPage}" />

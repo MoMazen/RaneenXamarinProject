@@ -1,6 +1,10 @@
-﻿using RaneenXamarinProject.Models;
+﻿using Newtonsoft.Json;
+using RaneenXamarinProject.Models;
+using RaneenXamarinProject.Views;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
+using Xamarin.CommunityToolkit.Extensions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -15,19 +19,13 @@ namespace RaneenXamarinProject.ViewModels
     {
         #region Fields
 
-        private ObservableCollection<Product> wishlistDetails;
+        private ObservableCollection<Product> wishlistItems;
 
-        private double totalPrice;
+        private ObservableCollection<CartItem> cartItems;
 
-        private double discountPrice;
-
-        private double discountPercent;
-
-        private double percent;
+        private bool hasItems;
 
         private int? cartItemCount;
-
-        private ObservableCollection<Product> produts;
 
         private Command cardItemCommand;
 
@@ -35,95 +33,47 @@ namespace RaneenXamarinProject.ViewModels
 
         private Command deleteCommand;
 
-        private Command quantitySelectedCommand;
-
         private Command itemTappedCommand;
 
         #endregion
 
+        #region Constructor
+        public WishlistPageViewModel()
+        {
+            initData();
+        }
+        #endregion
+
         #region Public properties
+
+        public bool HasItems
+        {
+            get { return hasItems; }
+            set 
+            { 
+                this.SetProperty(ref hasItems, value);
+            }
+        }
+
 
         /// <summary>
         /// Gets the property that has been bound with a list view, which displays the wishlist details.
         /// </summary>
-        public ObservableCollection<Product> WishlistDetails
+        public ObservableCollection<Product> WishListItems
         {
             get
             {
-                return this.wishlistDetails;
+                return this.wishlistItems;
             }
 
             private set
             {
-                if (this.wishlistDetails == value)
+                if (this.wishlistItems == value)
                 {
                     return;
                 }
 
-                this.SetProperty(ref this.wishlistDetails, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with label, which displays the total price.
-        /// </summary>
-        public double TotalPrice
-        {
-            get
-            {
-                return this.totalPrice;
-            }
-
-            set
-            {
-                if (this.totalPrice == value)
-                {
-                    return;
-                }
-
-                this.SetProperty(ref this.totalPrice, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with label, which displays total discount price.
-        /// </summary>
-        public double DiscountPrice
-        {
-            get
-            {
-                return this.discountPrice;
-            }
-
-            set
-            {
-                if (this.discountPrice == value)
-                {
-                    return;
-                }
-
-                this.SetProperty(ref this.discountPrice, value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with label, which displays discount.
-        /// </summary>
-        public double DiscountPercent
-        {
-            get
-            {
-                return this.discountPercent;
-            }
-
-            set
-            {
-                if (this.discountPercent == value)
-                {
-                    return;
-                }
-
-                this.SetProperty(ref this.discountPercent, value);
+                this.SetProperty(ref this.wishlistItems, value);
             }
         }
 
@@ -143,27 +93,19 @@ namespace RaneenXamarinProject.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the property that has been bound with list view, which displays the collection of products from json.
-        /// </summary>
-        [DataMember(Name = "products")]
-        public ObservableCollection<Product> Products
+
+        public ObservableCollection<CartItem> CartItems
         {
-            get
-            {
-                return this.produts;
-            }
+            get { return this.cartItems; }
 
             set
             {
-                if (this.produts == value)
+                if (this.cartItems == value)
                 {
                     return;
                 }
 
-                this.SetProperty(ref this.produts, value);
-                this.GetProducts(this.Products);
-                this.UpdatePrice();
+                this.SetProperty(ref this.cartItems, value);
             }
         }
 
@@ -205,17 +147,6 @@ namespace RaneenXamarinProject.ViewModels
         }
 
         /// <summary>
-        /// Gets the command that will be executed when the quantity is selected.
-        /// </summary>
-        public Command QuantitySelectedCommand
-        {
-            get
-            {
-                return this.quantitySelectedCommand ?? (this.quantitySelectedCommand = new Command(this.QuantitySelected));
-            }
-        }
-
-        /// <summary>
         /// Gets the command that is executed when the item is selected.
         /// </summary>
         public Command ItemTappedCommand
@@ -237,16 +168,44 @@ namespace RaneenXamarinProject.ViewModels
         private void CartClicked(object obj)
         {
             // Do something
+            Shell.Current.GoToAsync("//cart");
         }
 
         /// <summary>
         /// Invoked when add to cart button is clicked.
         /// </summary>
         /// <param name="obj">The Object</param>
-        private void AddToCartClicked(object obj)
+        private async void AddToCartClicked(object obj)
         {
-            this.cartItemCount = this.cartItemCount ?? 0;
-            this.CartItemCount += 1;
+            var product = obj as Product;
+
+            foreach (var item in CartItems)
+            {
+                if (item.item._id == product._id)
+                {
+                    await Shell.Current.DisplayAlert("Alert", "This product already exists in cart.", "OK");
+                    return;
+                }
+            }
+
+            var cartItem = new CartItem()
+            {
+                item = product,
+                amount = 1,
+            };
+
+            CartItems.Add(cartItem);
+            var cartItemsString = JsonConvert.SerializeObject(CartItems);
+
+            var clientData = new ClientData()
+            {
+                Token = Preferences.Get("UserToken", ""),
+                cartItems = cartItemsString,
+            };
+
+            await App.Database.SaveClientDataAsync(clientData);
+
+            await PageExtension.DisplayToastAsync(Shell.Current, "Product added to cart");
         }
 
         /// <summary>
@@ -256,19 +215,26 @@ namespace RaneenXamarinProject.ViewModels
         private void DeleteClicked(object obj)
         {
             IsLoading = true;
-            if (this.WishlistDetails.Count > 0)
-            {
-                this.WishlistDetails.Remove(obj as Product);
-            }
-            IsLoading = false;
-        }
 
-        /// <summary>
-        /// Invoked when the quantity is selected.
-        /// </summary>
-        /// <param name="selectedItem">The Object</param>
-        private void QuantitySelected(object selectedItem)
-        {
+            WishListItems.Remove(obj as Product);
+
+            var wishListItemsString = "";
+            if(wishlistItems.Count > 0)
+            {
+                wishListItemsString = JsonConvert.SerializeObject(WishListItems);
+            }
+
+            var clientData = new ClientData()
+            {
+                Token = Preferences.Get("UserToken", ""),
+                wishList = wishListItemsString
+            };
+
+            App.Database.SaveClientDataAsync(clientData);
+
+            HasItems = wishlistItems.Count > 0;
+
+            IsLoading = false;
         }
 
         /// <summary>
@@ -277,55 +243,49 @@ namespace RaneenXamarinProject.ViewModels
         private void ItemSelected(object obj)
         {
             // Do something
+            Shell.Current.Navigation.PushAsync(new DetailPage((obj as Product)._id));
+        }
+
+        private async void initData()
+        {
+            GetWishList();
+            GetCartItems();
         }
 
         /// <summary>
         /// This method is used to get the products from json.
         /// </summary>
         /// <param name="products">The products</param>
-        private void GetProducts(ObservableCollection<Product> products)
+        private async void GetWishList()
         {
-            this.WishlistDetails = new ObservableCollection<Product>();
-            if (products != null && products.Count > 0)
-            {
-                this.WishlistDetails = products;
-            }
-        }
+            this.WishListItems = new ObservableCollection<Product>();
 
-        /// <summary>
-        /// This method is used to update the price amount.
-        /// </summary>
-        private void UpdatePrice()
-        {
-            this.ResetPriceValue();
-
-            if (this.WishlistDetails != null && this.WishlistDetails.Count > 0)
+            var clientData = await getCurrentUserData();
+            if (clientData != null)
             {
-                foreach (var wishlistDetail in this.WishlistDetails)
+                if (clientData.wishList != null && clientData.wishList != "")
                 {
-                    if (wishlistDetail.TotalQuantity == 0)
-                    {
-                        wishlistDetail.TotalQuantity = 1;
-                    }
-
-                    this.TotalPrice += wishlistDetail.ActualPrice * wishlistDetail.TotalQuantity;
-                    this.DiscountPrice += wishlistDetail.DiscountPrice * wishlistDetail.TotalQuantity;
-                    this.percent += wishlistDetail.DiscountPercent;
+                    string WishListItemsString = clientData.wishList;
+                    WishListItems = JsonConvert.DeserializeObject<ObservableCollection<Product>>(WishListItemsString);
                 }
-
-                this.DiscountPercent = this.percent > 0 ? this.percent / this.WishlistDetails.Count : 0;
             }
+
+            HasItems = WishListItems.Count > 0;
         }
 
-        /// <summary>
-        /// This method is used to reset the price amount.
-        /// </summary>
-        private void ResetPriceValue()
+        private async void GetCartItems()
         {
-            this.TotalPrice = 0;
-            this.DiscountPercent = 0;
-            this.DiscountPrice = 0;
-            this.percent = 0;
+            CartItems = new ObservableCollection<CartItem>();
+
+            var clientData = await getCurrentUserData();
+            if (clientData != null)
+            {
+                if (clientData.cartItems != null && clientData.cartItems != "")
+                {
+                    string cartItemsString = clientData.cartItems;
+                    CartItems = JsonConvert.DeserializeObject<ObservableCollection<CartItem>>(cartItemsString);
+                }
+            }
         }
 
         #endregion

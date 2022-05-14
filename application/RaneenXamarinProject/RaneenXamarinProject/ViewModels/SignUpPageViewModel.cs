@@ -195,7 +195,7 @@ namespace RaneenXamarinProject.ViewModels
                 Debug.WriteLine("Json: " + jsonSignUpData);
                 try
                 {
-                    var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/register", new StringContent(jsonSignUpData, Encoding.UTF8, "application/json"));
+                    var httpResponseMessage = await httpClient.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/register", new StringContent(jsonSignUpData, Encoding.UTF8, "application/json"));
 
                     if (httpResponseMessage.IsSuccessStatusCode)
                     {

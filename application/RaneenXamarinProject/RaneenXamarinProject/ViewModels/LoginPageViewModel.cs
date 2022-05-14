@@ -143,7 +143,7 @@ namespace RaneenXamarinProject.ViewModels
 
                 try
                 {
-                    var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/login", new StringContent(jsonLoginData, Encoding.UTF8, "application/json"));
+                    var httpResponseMessage = await httpClient.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/auth/login", new StringContent(jsonLoginData, Encoding.UTF8, "application/json"));
 
                     if (httpResponseMessage.IsSuccessStatusCode)
                     {
@@ -155,6 +155,8 @@ namespace RaneenXamarinProject.ViewModels
                         if (response.success)
                         {
                             Preferences.Set("UserToken", response.jwt);
+
+                            IsLoading = false;      // deActivate loading
                             await Shell.Current.Navigation.PopToRootAsync();
                         }
                     }
@@ -171,8 +173,8 @@ namespace RaneenXamarinProject.ViewModels
                     Debug.WriteLine(ex);
                     await Shell.Current.DisplayAlert("ALert", "Request time-out please try again.", "OK");
                 }
-                IsLoading = false;      // deActivate loading
             }
+            IsLoading = false;      // deActivate loading
         }
 
         /// <summary>
@@ -242,7 +244,7 @@ namespace RaneenXamarinProject.ViewModels
 
                                 Debug.WriteLine("Request Body: " + jsonFacebookProfile);
 
-                                var httpResponseMessage = await client.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/oauth/login", new StringContent(jsonFacebookProfile, Encoding.UTF8, "application/json"));
+                                var httpResponseMessage = await httpClient.PostAsync("https://raneen-app.herokuapp.com/app/api/v1/oauth/login", new StringContent(jsonFacebookProfile, Encoding.UTF8, "application/json"));
 
                                 if (httpResponseMessage.IsSuccessStatusCode)
                                 {

@@ -1,249 +1,86 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.Serialization;
-using Xamarin.Forms.Internals;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace RaneenXamarinProject.Models
 {
-    /// <summary>
-    /// Model for pages with product.
-    /// </summary>
-    [Preserve(AllMembers = true)]
-    [DataContract]
-    public class Product : INotifyPropertyChanged
+    public class Product: INotifyPropertyChanged
     {
-        #region Fields
+        public string _id { get; set; }
+        public string title { get; set; }
+        public string description { get; set; }
+        public string vendor { get; set; }
+        public DateTime created_at { get; set; }
+        public DateTime updated_at { get; set; }
+        public DateTime published_at { get; set; }
+        public string status { get; set; }
+        public string category { get; set; }
+        public List<string> tags { get; set; }
+        public string admin_id { get; set; }
+        public float weight { get; set; }
+        public float weight_unit { get; set; }
+        public float price { get; set; }
+        public int amount { get; set; }
+        public List<string> images { get; set; }
 
         private bool isFavourite;
 
-        private string previewImage;
-
-        private List<string> previewImages;
-
-        private int totalQuantity;
-
-        private double actualPrice;
-
-        private double discountPrice;
-
-        private double discountPercent;
-
-        private ObservableCollection<Review> reviews = new ObservableCollection<Review>();
-
-        #endregion
-
-        #region Event
-
-        /// <summary>
-        /// The declaration of property changed event.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the property that holds the product id.
-        /// </summary>
-        [DataMember(Name = "id")]
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with Xamarin.Forms Image, which displays the product image.
-        /// </summary>
-        [DataMember(Name = "previewimage")]
-        public string PreviewImage
-        {
-            get { return App.ImageServerPath + this.previewImage; }
-            set { this.previewImage = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with SfRotator, which displays the item images.
-        /// </summary>
-        [DataMember(Name = "previewimages")]
-        public List<string> PreviewImages
-        {
-            get
-            {
-                for (var i = 0; i < this.previewImages.Count; i++)
-                {
-                    this.previewImages[i] = this.previewImages[i].Contains(App.ImageServerPath) ? this.previewImages[i] : App.ImageServerPath + this.previewImages[i];
-                }
-
-                return this.previewImages;
-            }
-
-            set
-            {
-                this.previewImages = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with a label, which displays the product name.
-        /// </summary>
-        [DataMember(Name = "name")]
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with a label, which displays the product summary.
-        /// </summary>
-        [DataMember(Name = "summary")]
-        public string Summary { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with a label, which displays the product description.
-        /// </summary>
-        [DataMember(Name = "description")]
-        public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with a label, which displays the actual price of the product.
-        /// </summary>
-        [DataMember(Name = "actualprice")]
-        public double ActualPrice
-        {
-            get
-            {
-                return this.actualPrice;
-            }
-
-            set
-            {
-                this.actualPrice = value;
-                this.NotifyPropertyChanged(nameof(this.ActualPrice));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with a label, which displays the discounted price of the product.
-        /// </summary>
-        public double DiscountPrice
-        {
-            get
-            {
-                return this.ActualPrice - (this.ActualPrice * (this.DiscountPercent / 100));
-            }
-
-            set
-            {
-                this.discountPrice = value;
-                this.NotifyPropertyChanged(nameof(this.DiscountPrice));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with a label, which displays the discounted percent of the product.
-        /// </summary>
-        [DataMember(Name = "discountpercent")]
-        public double DiscountPercent
-        {
-            get
-            {
-                return this.discountPercent;
-            }
-
-            set
-            {
-                this.discountPercent = value;
-                this.NotifyPropertyChanged(nameof(this.DiscountPercent));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with label, which displays the overall rating of the product.
-        /// </summary>
-        [DataMember(Name = "overallrating")]
-        public double OverallRating { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with view, which displays the customer review.
-        /// </summary>
-        [DataMember(Name = "reviews")]
-        public ObservableCollection<Review> Reviews
-        {
-            get
-            {
-                return this.reviews;
-            }
-
-            set
-            {
-                this.reviews = value;
-                this.NotifyPropertyChanged(nameof(this.Reviews));
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with label, which displays the seller.
-        /// </summary>
-        [DataMember(Name = "sellerName")]
-        public string SellerName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the property has been bound with SfCombobox which displays selected quantity of product.
-        /// </summary>
-        [DataMember(Name = "quantities")]
-        public List<object> Quantities { get; set; } = new List<object> { 1, 2, 3, 4, 5 };
-
-        /// <summary>
-        /// Gets or sets the property that has been bound with SfCombobox, which displays the product variants.
-        /// </summary>
-        [DataMember(Name = "sizevariants")]
-        public List<string> SizeVariants { get; set; } = new List<string> { "XS", "S", "M", "L", "XL" };
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the cart is favorite.
-        /// </summary>
-        [DataMember(Name = "isfavourite")]
         public bool IsFavourite
         {
             get
             {
-                return this.isFavourite;
+                return isFavourite;
             }
-
             set
             {
-                this.isFavourite = value;
-                this.NotifyPropertyChanged(nameof(this.IsFavourite));
+                isFavourite = value;
+                this.NotifyPropertyChanged("IsFavourite");
             }
         }
 
-        /// <summary>
-        /// Gets or sets the property that has been bound with SfCombobox, which displays the total quantity.
-        /// </summary>
-        [DataMember(Name = "totalquantity")]
-        public int TotalQuantity
-        {
+        public double DiscountPrice 
+        { 
             get
             {
-                return this.totalQuantity;
-            }
-
-            set
-            {
-                this.totalQuantity = value;
-                this.NotifyPropertyChanged(nameof(this.TotalQuantity));
+                return this.price - (this.price * (this.DiscountPercent/100));
             }
         }
+        public double DiscountPercent { get; } = 12;
 
-        #endregion
+        public double OverallRating { get; } = 4;
 
-        #region Methods
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        /// <summary>
-        /// The PropertyChanged event occurs when changing the value of property.
-        /// </summary>
-        /// <param name="propertyName">Property name</param>
-        public void NotifyPropertyChanged(string propertyName)
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        #endregion
+        private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(storage, value))
+            {
+                return false;
+            }
+
+            storage = value;
+            this.NotifyPropertyChanged(propertyName);
+
+            return true;
+        }
+
+
+    }
+
+    public class CartItem
+    {
+        public string id { get; set; }
+
+        public int amount { get; set; } = 1;
+
+        public Product item { get; set; }
+
     }
 }

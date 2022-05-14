@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RaneenXamarinProject.Views.CartPage"
+             xmlns:local="clr-namespace:RaneenXamarinProject.Views"
+             xmlns:syncEffectsView="clr-namespace:Syncfusion.XForms.EffectsView;assembly=Syncfusion.Core.XForms"
+             xmlns:template="clr-namespace:RaneenXamarinProject.Views.Templates"
+             xmlns:button="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:converter="clr-namespace:RaneenXamarinProject.Converters"
+             xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+             xmlns:svg="clr-namespace:RaneenXamarinProject.Controls"
+             Title="Cart"
+             x:Name="cartPage"
+             BackgroundColor="{StaticResource Gray-White}"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:InverseBoolConverter x:Key="InverseBoolConverter"/>
+            <converter:IntToThicknessConverter x:Key="intToThicknessConverter" />
+            <converter:DynamicResourceToColorConverter x:Key="DynamicResourceToColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <Grid>
+            <StackLayout>
+                <!--  Title View  -->
+                <svg:TitleView Title="Cart"/>
+
+                <!-- No Items View -->
+                <Grid RowDefinitions="*, Auto"
+                  IsVisible="{Binding HasItems, Converter={StaticResource InverseBoolConverter}}">
+
+                    <StackLayout
+                    Grid.Row="1"
+                    BackgroundColor="Transparent"
+                    Spacing="0"
+                    VerticalOptions="Center">
+
+                        <!--Display the svg illustration image-->
+
+                        <svg:SVGImage
+                        x:Name="ErrorImage"
+                        HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                            AndroidPhonePortrait=200,
+                            AndroidPhoneLandscape=140,
+                            iOSPhonePortrait=200,
+                            iOSPhoneLandscape=140}"
+                        Source="EmptyCart.svg"
+                        VerticalOptions="Center"
+                        WidthRequest="{x:OnIdiom Phone=200,
+                            Desktop=300,
+                            Tablet=300}" />
+
+                        <!--Label to display header-->
+                        <Label
+                        Margin="0,32,0,8"
+                        FontSize="20"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="CART IS EMPTY"
+                        TextColor="#333942"
+                        VerticalTextAlignment="Center" />
+
+                        <!--Label to display content-->
+                        <Label
+                        Margin="8,0,8,0"
+                        FontSize="16"
+                        LineHeight="{OnPlatform Android=1.25,Default=-1}"
+                        Style="{StaticResource DescriptionLabelStyle}"
+                        Text="You don't have any items in your cart"
+                        TextColor="#333942"
+                        VerticalTextAlignment="Center" />
+                    </StackLayout>
+
+                    <!--Try again button-->
+                    <button:SfButton
+                    Grid.Row="4"
+                    Margin="0,10,0,24"
+                    Command="{Binding ContinueCommand}"
+                    Style="{StaticResource GradientButtonStyle}"
+                    Text="CONTINUE SHOPPING"
+                    VerticalOptions="End"
+                    WidthRequest="245" />
+
+                </Grid>
+
+                <!-- Cart Items View -->
+                <ScrollView VerticalScrollBarVisibility="Never" IsVisible="{Binding HasItems}">
+
+                    <!--  Cart Details  -->
+                    <Grid
+                Margin="{OnIdiom Default='0,16,0,0',
+                                 Desktop='16'}"
+                BackgroundColor="{OnIdiom Default={StaticResource Transparent},
+                                          Desktop={DynamicResource Gray-Bg},
+                                          Converter={StaticResource DynamicResourceToColorConverter}}"
+                ColumnSpacing="0"
+                HorizontalOptions="{OnIdiom Default=Fill,
+                                            Desktop=FillAndExpand}"
+                RowSpacing="0">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{OnIdiom Default=Auto, Phone=0}" />
+                            <RowDefinition Height="{OnIdiom Default=Auto, Phone=0}" />
+                            <RowDefinition Height="{OnIdiom Default=Auto, Desktop=*}" />
+                            <RowDefinition Height="{OnIdiom Default=*, Desktop=0}" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="{OnIdiom Default=*, Desktop=3*}" />
+                            <ColumnDefinition Width="{OnIdiom Default=0, Desktop=Auto}" />
+                            <ColumnDefinition Width="{OnIdiom Default=0, Desktop=1*}" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Cart Header  -->
+                        <StackLayout
+                    Padding="16"
+                    BackgroundColor="{DynamicResource Gray-Bg}"
+                    Orientation="Horizontal">
+                            <Label
+                        HorizontalOptions="Start"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="My Cart" />
+
+                            <Label
+                        BackgroundColor="{DynamicResource Gray-Bg}"
+                        HorizontalOptions="EndAndExpand"
+                        HorizontalTextAlignment="End"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="{Binding TotalPrice, StringFormat='Total: ${0}'}" />
+                        </StackLayout>
+
+                        <BoxView
+                    Grid.Row="1"
+                    HeightRequest="1"
+                    Style="{StaticResource HorizontalSeparatorStyle}" />
+
+                        <!--  Cart items  -->
+                        <StackLayout
+                    x:Name="CartLayout"
+                    Grid.Row="2"
+                    BackgroundColor="{OnIdiom Default={StaticResource Transparent},
+                                              Desktop={StaticResource Gray-Bg},
+                                              Converter={StaticResource DynamicResourceToColorConverter}}"
+                    BindableLayout.ItemsSource="{Binding CartItems}"
+                    Spacing="16"
+                    VerticalOptions="Start">
+
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <syncEffectsView:SfEffectsView
+                                    RippleColor="{DynamicResource Gray-300}"
+                                    TouchDownEffects="Ripple"
+                                    TouchUpCommand="{Binding Path=BindingContext.ItemTappedCommand, Source={x:Reference cartPage}}"
+                                    TouchUpCommandParameter="{Binding}">
+                                        <template:CartItemListTemplate
+                                        x:Name="template"
+                                        ChildElement="{Binding Source={x:Reference template}}"
+                                        ParentBindingContext="{Binding Path=BindingContext, Source={x:Reference cartPage}}"
+                                        ParentElement="{Binding Source={x:Reference CartLayout}}" />
+                                    </syncEffectsView:SfEffectsView>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
+
+                        <!--  Separator  -->
+                        <BoxView
+                        Grid.Row="0"
+                        Grid.RowSpan="4"
+                        Grid.Column="1"
+                        Style="{StaticResource HorizontalSeparatorStyle}"
+                        VerticalOptions="Fill"
+                        WidthRequest="{OnIdiom Default=0,
+                                               Desktop=16}"
+                        Color="{DynamicResource Gray-100}" />
+
+                        <!--  Price Details  -->
+                        <local:PriceDetailView
+                        Grid.Row="{OnIdiom Default=3,
+                                           Desktop=0}"
+                        Grid.RowSpan="{OnIdiom Default=1,
+                                               Desktop=4}"
+                        Grid.Column="{OnIdiom Default=0,
+                                              Desktop=2}"
+                        Grid.ColumnSpan="{OnIdiom Default=3,
+                                                  Desktop=1}"
+                        Margin="{OnIdiom Default='0,16,0,0',
+                                         Desktop=0}"
+                        ActionText="PLACE ORDER"
+                        BackgroundColor="{DynamicResource Gray-100}"
+                        HorizontalOptions="{OnIdiom Default=Fill,
+                                                    Desktop=End}" />
+
+                    </Grid>
+                </ScrollView>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding IsLoading}" HorizontalOptions="FillAndExpand" BackgroundColor="#80000000" Grid.Row="0" Grid.Column="0" VerticalOptions="FillAndExpand">
+                <ActivityIndicator Color="White" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" x:Name="actInd" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
